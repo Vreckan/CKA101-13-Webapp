@@ -2,7 +2,9 @@ package com.service.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.service.model.ServiceService;
 import com.service.model.ServiceVO;
@@ -19,177 +21,280 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/service/service.do")
 public class ServiceServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
-        doPost(req, res);
-    }
+	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		doPost(req, res);
+	}
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        req.setCharacterEncoding("UTF-8");
+		req.setCharacterEncoding("UTF-8");
 
-        String action = req.getParameter("action");
-        
-        if (action == null) {
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/select_page.jsp");
-            successView.forward(req, res);
-            return;
-        }
+		String action = req.getParameter("action");
 
-        if ("getAll".equals(action)) {
-            ServiceService serviceSvc = new ServiceService();
+		if (action == null) {
+			RequestDispatcher successView = req.getRequestDispatcher("/frontend/service/select_page.jsp");
+			successView.forward(req, res);
+			return;
+		}
 
-            List<ServiceVO> list = serviceSvc.getAll();
+		if ("getAll".equals(action)) {
+			ServiceService serviceSvc = new ServiceService();
 
-            req.setAttribute("serviceList", list);
+			List<ServiceVO> list = serviceSvc.getAll();
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/listAllService.jsp");
+			req.setAttribute("serviceList", list);
 
-            successView.forward(req, res);
-            return;
-        }
+			RequestDispatcher successView = req.getRequestDispatcher("/frontend/service/listAllService.jsp");
 
-        if ("getOne_For_Display".equals(action)) {
-            Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
+			successView.forward(req, res);
+			return;
+		}
 
-            ServiceService serviceSvc = new ServiceService();
+		if ("getOne_For_Display".equals(action)) {
 
-            ServiceVO serviceVO = serviceSvc.getOneService(serviceId);
+		    Map<String, String> errorMsgs = new LinkedHashMap<>();
+		    req.setAttribute("errorMsgs", errorMsgs);
 
-            req.setAttribute("serviceVO", serviceVO);
+		    String serviceIdStr = req.getParameter("serviceId");
+		    Integer serviceId = null;
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/listOneService.jsp");
+		    // 1. 檢查是否空白
+		    if (serviceIdStr == null || serviceIdStr.trim().isEmpty()) {
+		        errorMsgs.put("serviceId", "請輸入服務編號");
+		    }
 
-            successView.forward(req, res);
-            return;
-        }
+		    // 2. 檢查是否為數字
+		    if (errorMsgs.isEmpty()) {
+		        try {
+		            serviceId = Integer.valueOf(serviceIdStr.trim());
 
-        if ("insert".equals(action)) {
-            Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
-            Integer memberId = Integer.valueOf(req.getParameter("memberId"));
-            String serviceName = req.getParameter("serviceName");
-            String description = req.getParameter("description");
-            Integer hourlyRate = Integer.valueOf(req.getParameter("hourlyRate"));
-            Byte status = Byte.valueOf(req.getParameter("status"));
+		            if (serviceId <= 0) {
+		                errorMsgs.put("serviceId", "服務編號必須大於 0");
+		            }
 
-            ServiceService serviceSvc = new ServiceService();
+		        } catch (NumberFormatException e) {
+		            errorMsgs.put("serviceId", "服務編號只能輸入數字");
+		        }
+		    }
 
-            ServiceVO serviceVO = serviceSvc.add(
-                    serviceTypeId,
-                    memberId,
-                    serviceName,
-                    description,
-                    hourlyRate,
-                    status,
-                    LocalDateTime.now()
-            );
+		    // 3. 格式錯誤，回到查詢頁面
+		    if (!errorMsgs.isEmpty()) {
+		        RequestDispatcher failureView =
+		                req.getRequestDispatcher("/frontend/service/select_page.jsp");
 
-            req.setAttribute("serviceVO", serviceVO);
+		        failureView.forward(req, res);
+		        return;
+		    }
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/listOneService.jsp");
+		    ServiceService serviceSvc = new ServiceService();
+		    ServiceVO serviceVO = serviceSvc.getOneService(serviceId);
 
-            successView.forward(req, res);
-            return;
-        }
+		    // 4. 檢查資料是否存在
+		    if (serviceVO == null) {
+		        errorMsgs.put("serviceId", "查無此服務編號");
 
-        if ("getOne_For_Update".equals(action)) {
-            Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
+		        RequestDispatcher failureView =
+		                req.getRequestDispatcher("/frontend/service/select_page.jsp");
 
-            ServiceService serviceSvc = new ServiceService();
+		        failureView.forward(req, res);
+		        return;
+		    }
 
-            ServiceVO serviceVO = serviceSvc.getOneService(serviceId);
+		    req.setAttribute("serviceVO", serviceVO);
 
-            req.setAttribute("serviceVO", serviceVO);
+		    RequestDispatcher successView =
+		            req.getRequestDispatcher("/frontend/service/listOneService.jsp");
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/update_service_input.jsp");
+		    successView.forward(req, res);
+		    return;
+		}
 
-            successView.forward(req, res);
-            return;
-        }
+		if ("insert".equals(action)) {
 
-        if ("update".equals(action)) {
-            Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
-            Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
-            Integer memberId = Integer.valueOf(req.getParameter("memberId"));
-            String serviceName = req.getParameter("serviceName");
-            String description = req.getParameter("description");
-            Integer hourlyRate = Integer.valueOf(req.getParameter("hourlyRate"));
-            Byte status = Byte.valueOf(req.getParameter("status"));
+		    Map<String, String> errorMsgs = new LinkedHashMap<>();
+		    req.setAttribute("errorMsgs", errorMsgs);
 
-            ServiceService serviceSvc = new ServiceService();
+		    Integer serviceTypeId = null;
+		    Integer memberId = null;
+		    Integer hourlyRate = null;
+		    Byte status = null;
 
-            ServiceVO serviceVO = serviceSvc.update(
-                    serviceId,
-                    serviceTypeId,
-                    memberId,
-                    serviceName,
-                    description,
-                    hourlyRate,
-                    status
-            );
+		    String serviceName = req.getParameter("serviceName");
+		    String description = req.getParameter("description");
 
-            req.setAttribute("serviceVO", serviceVO);
+		    // 服務類型編號
+		    try {
+		        serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
+		        if (serviceTypeId <= 0) {
+		            errorMsgs.put("serviceTypeId", "服務類型編號必須大於 0");
+		        }
+		    } catch (Exception e) {
+		        errorMsgs.put("serviceTypeId", "請選擇服務類型");
+		    }
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/listOneService.jsp");
+		    // 會員編號
+		    try {
+		        memberId = Integer.valueOf(req.getParameter("memberId"));
+		        if (memberId <= 0) {
+		            errorMsgs.put("memberId", "會員編號必須大於 0");
+		        }
+		    } catch (Exception e) {
+		        errorMsgs.put("memberId", "會員編號格式錯誤");
+		    }
 
-            successView.forward(req, res);
-            return;
-        }
+		    // 服務名稱
+		    if (serviceName == null || serviceName.trim().isEmpty()) {
+		        errorMsgs.put("serviceName", "服務名稱請勿空白");
+		    } else if (serviceName.trim().length() > 50) {
+		        errorMsgs.put("serviceName", "服務名稱不可超過 50 個字");
+		    }
 
-        if ("delete".equals(action)) {
-            Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
+		    // 服務描述
+		    if (description == null || description.trim().isEmpty()) {
+		        errorMsgs.put("description", "服務描述請勿空白");
+		    }
 
-            ServiceService serviceSvc = new ServiceService();
+		    // 每小時費率
+		    try {
+		        hourlyRate = Integer.valueOf(req.getParameter("hourlyRate"));
+		        if (hourlyRate < 0) {
+		            errorMsgs.put("hourlyRate", "每小時費率不可小於 0");
+		        }
+		    } catch (Exception e) {
+		        errorMsgs.put("hourlyRate", "每小時費率必須是整數");
+		    }
 
-            serviceSvc.delete(serviceId);
+		    // 狀態
+		    try {
+		        status = Byte.valueOf(req.getParameter("status"));
+		        if (status != 0 && status != 1) {
+		            errorMsgs.put("status", "服務狀態只能是 0 或 1");
+		        }
+		    } catch (Exception e) {
+		        errorMsgs.put("status", "請選擇服務狀態");
+		    }
 
-            List<ServiceVO> list = serviceSvc.getAll();
+		    // 保留使用者原本輸入的資料
+		    ServiceVO serviceVO = new ServiceVO();
+		    serviceVO.setServiceTypeId(serviceTypeId);
+		    serviceVO.setMemberId(memberId);
+		    serviceVO.setServiceName(serviceName);
+		    serviceVO.setDescription(description);
+		    serviceVO.setHourlyRate(hourlyRate);
+		    serviceVO.setStatus(status);
 
-            req.setAttribute("serviceList", list);
+		    if (!errorMsgs.isEmpty()) {
+		        req.setAttribute("serviceVO", serviceVO);
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/listAllService.jsp");
+		        RequestDispatcher failureView =
+		                req.getRequestDispatcher("/frontend/service/addService.jsp");
 
-            successView.forward(req, res);
-            return;
-        }
-        
-        if ("getServices_By_ServiceType".equals(action)) {
+		        failureView.forward(req, res);
+		        return;
+		    }
 
-            Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
+		    ServiceService serviceSvc = new ServiceService();
 
-            ServiceService serviceSvc = new ServiceService();
-            List<ServiceVO> serviceList = serviceSvc.getServicesByServiceTypeId(serviceTypeId);
+		    serviceVO = serviceSvc.add(
+		            serviceTypeId,
+		            memberId,
+		            serviceName.trim(),
+		            description.trim(),
+		            hourlyRate,
+		            status,
+		            LocalDateTime.now()
+		    );
 
-            req.setAttribute("serviceList", serviceList);
+		    req.setAttribute("serviceVO", serviceVO);
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/listServicesByType.jsp");
-            successView.forward(req, res);
-            return;
-        }
-        if ("toServiceSelectPage".equals(action)) {
+		    RequestDispatcher successView =
+		            req.getRequestDispatcher("/frontend/service/listOneService.jsp");
 
-            System.out.println("進入 toServiceSelectPage");
+		    successView.forward(req, res);
+		    return;
+		}
 
-            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
-            List<ServiceTypeVO> list = serviceTypeSvc.getAll();
+		if ("getOne_For_Update".equals(action)) {
+			Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
 
-            System.out.println("服務類型數量 = " + list.size());
+			ServiceService serviceSvc = new ServiceService();
 
-            req.setAttribute("serviceTypeList", list);
+			ServiceVO serviceVO = serviceSvc.getOneService(serviceId);
 
-            RequestDispatcher successView =
-                    req.getRequestDispatcher("/frontend/service/select_page.jsp");
-            successView.forward(req, res);
-            return;
-        }
-    }
+			req.setAttribute("serviceVO", serviceVO);
+
+			RequestDispatcher successView = req.getRequestDispatcher("/frontend/service/update_service_input.jsp");
+
+			successView.forward(req, res);
+			return;
+		}
+
+		if ("update".equals(action)) {
+			Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
+			Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
+			Integer memberId = Integer.valueOf(req.getParameter("memberId"));
+			String serviceName = req.getParameter("serviceName");
+			String description = req.getParameter("description");
+			Integer hourlyRate = Integer.valueOf(req.getParameter("hourlyRate"));
+			Byte status = Byte.valueOf(req.getParameter("status"));
+
+			ServiceService serviceSvc = new ServiceService();
+
+			ServiceVO serviceVO = serviceSvc.update(serviceId, serviceTypeId, memberId, serviceName, description,
+					hourlyRate, status);
+
+			req.setAttribute("serviceVO", serviceVO);
+
+			RequestDispatcher successView = req.getRequestDispatcher("/frontend/service/listOneService.jsp");
+
+			successView.forward(req, res);
+			return;
+		}
+
+		if ("delete".equals(action)) {
+			Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
+
+			ServiceService serviceSvc = new ServiceService();
+
+			serviceSvc.delete(serviceId);
+
+			List<ServiceVO> list = serviceSvc.getAll();
+
+			req.setAttribute("serviceList", list);
+
+			RequestDispatcher successView = req.getRequestDispatcher("/frontend/service/listAllService.jsp");
+
+			successView.forward(req, res);
+			return;
+		}
+
+		if ("getServices_By_ServiceType".equals(action)) {
+
+			Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
+
+			ServiceService serviceSvc = new ServiceService();
+			List<ServiceVO> serviceList = serviceSvc.getServicesByServiceTypeId(serviceTypeId);
+
+			req.setAttribute("serviceList", serviceList);
+
+			RequestDispatcher successView = req.getRequestDispatcher("/frontend/service/listServicesByType.jsp");
+			successView.forward(req, res);
+			return;
+		}
+		if ("toServiceSelectPage".equals(action)) {
+
+			System.out.println("進入 toServiceSelectPage");
+
+			ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+			List<ServiceTypeVO> list = serviceTypeSvc.getAll();
+
+			System.out.println("服務類型數量 = " + list.size());
+
+			req.setAttribute("serviceTypeList", list);
+
+			RequestDispatcher successView = req.getRequestDispatcher("/frontend/service/select_page.jsp");
+			successView.forward(req, res);
+			return;
+		}
+	}
 }

@@ -1,9 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:if test="${serviceTypeList == null}">
-    <jsp:forward page="/service/service.do">
-        <jsp:param name="action" value="toServiceSelectPage" />
-    </jsp:forward>
+	<jsp:forward page="/service/service.do">
+		<jsp:param name="action" value="toServiceSelectPage" />
+	</jsp:forward>
 </c:if>
 
 <!DOCTYPE html>
@@ -23,7 +23,6 @@ body {
 	background: #f3f4f6;
 	color: #111827;
 }
-
 
 .page {
 	min-height: 100vh;
@@ -249,6 +248,11 @@ input[type="text"]:focus, input[type="number"]:focus {
 	background: #e5e7eb;
 	margin: 22px 0;
 }
+.field-error {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+}
 
 @media ( max-width : 900px) {
 	.page {
@@ -338,9 +342,17 @@ input[type="text"]:focus, input[type="number"]:focus {
 
 						<form method="post"
 							action="${pageContext.request.contextPath}/service/service.do">
-							<div class="form-group">
-								<label for="serviceId">查詢單一服務編號</label> <input type="number"
-									id="serviceId" name="serviceId" placeholder="請輸入服務編號，例如：1">
+							<div class="input-with-error">
+								<input type="text" name="serviceId"
+									value="<c:out value='${param.serviceId}' />"
+									class="${not empty errorMsgs.serviceId ? 'input-error' : ''}"
+									placeholder="請輸入服務編號">
+
+								<c:if test="${not empty errorMsgs.serviceId}">
+									<span class="field-error"> <c:out
+											value="${errorMsgs.serviceId}" />
+									</span>
+								</c:if>
 							</div>
 
 							<input type="hidden" name="action" value="getOne_For_Display">

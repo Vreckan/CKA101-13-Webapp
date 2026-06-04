@@ -2,6 +2,8 @@ package com.service.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.servicetype.model.ServiceTypeVO;
 
 import jakarta.persistence.Column;
@@ -44,7 +46,8 @@ public class ServiceVO {
 	@Column(name = "STATUS")
 	private Byte status;
 	
-	@Column(name = "CREATED_AT")
+	@CreationTimestamp
+	@Column(name = "CREATED_AT", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
 	

@@ -12,22 +12,44 @@ public class ServiceService {
 		dao = new ServiceDAOHibernate();
 	}
 
-	public ServiceVO add(Integer serviceTypeId, Integer memberId, String serviceName, String description,
-			Integer hourlyRate, Byte status, LocalDateTime createdAt) {
+	public ServiceVO add(
+	        Integer serviceTypeId,
+	        Integer memberId,
+	        String serviceName,
+	        String description,
+	        Integer hourlyRate,
+	        Byte status,
+	        LocalDateTime createdAt) {
 
-		ServiceVO svc = new ServiceVO();
+	    if (serviceTypeId == null) {
+	        throw new IllegalArgumentException("服務類型不可為空");
+	    }
 
-		svc.setServiceTypeId(serviceTypeId);
-		svc.setMemberId(memberId);
-		svc.setServiceName(serviceName);
-		svc.setDescription(description);
-		svc.setHourlyRate(hourlyRate);
-		svc.setStatus(status);
-		svc.setCreatedAt(createdAt);
+	    if (serviceName == null || serviceName.trim().isEmpty()) {
+	        throw new IllegalArgumentException("服務名稱不可為空");
+	    }
 
-		dao.insert(svc);
+	    if (hourlyRate == null || hourlyRate < 0) {
+	        throw new IllegalArgumentException("每小時費率不可小於 0");
+	    }
 
-		return svc;
+	    if (status == null || (status != 0 && status != 1)) {
+	        throw new IllegalArgumentException("服務狀態不合法");
+	    }
+
+	    ServiceVO svc = new ServiceVO();
+
+	    svc.setServiceTypeId(serviceTypeId);
+	    svc.setMemberId(memberId);
+	    svc.setServiceName(serviceName);
+	    svc.setDescription(description);
+	    svc.setHourlyRate(hourlyRate);
+	    svc.setStatus(status);
+	    svc.setCreatedAt(createdAt);
+
+	    dao.insert(svc);
+
+	    return svc;
 	}
 
 	public ServiceVO update(Integer serviceId, Integer serviceTypeId, Integer memberId, String serviceName,

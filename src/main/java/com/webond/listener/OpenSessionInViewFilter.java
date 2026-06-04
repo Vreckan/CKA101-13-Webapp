@@ -23,7 +23,6 @@ public class OpenSessionInViewFilter implements Filter {
             throws IOException, ServletException {
 
         SessionFactory factory = HibernateUtil.getSessionFactory();
-
         Session session = null;
         Transaction tx = null;
 
