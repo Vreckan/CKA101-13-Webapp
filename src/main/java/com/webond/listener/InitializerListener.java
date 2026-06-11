@@ -6,7 +6,8 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 
-@WebListener
+//@WebListener
+//spring後不需要使用 已經寫在web inf xml裡
 public class InitializerListener implements ServletContextListener{
 	
 	public void contextInitialized(ServletContextEvent sce) {

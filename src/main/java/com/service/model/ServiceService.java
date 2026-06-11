@@ -3,53 +3,58 @@ package com.service.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+
 public class ServiceService {
 
 	private ServiceDAO_interface dao;
 
-	public ServiceService() {
+//	public ServiceService() {
 //		dao = new ServiceDAO();
-		dao = new ServiceDAOHibernate();
+//		dao = new ServiceDAOHibernate();
+//	} 
+//	
+
+	public ServiceService(ServiceDAO_interface dao) {
+		this.dao = dao;
 	}
 
-	public ServiceVO add(
-	        Integer serviceTypeId,
-	        Integer memberId,
-	        String serviceName,
-	        String description,
-	        Integer hourlyRate,
-	        Byte status,
-	        LocalDateTime createdAt) {
+	public ServiceVO add(Integer serviceTypeId, Integer memberId, String serviceName, String description,
+			Integer hourlyRate, Byte status, LocalDateTime createdAt) {
 
-	    if (serviceTypeId == null) {
-	        throw new IllegalArgumentException("服務類型不可為空");
-	    }
+		if (serviceTypeId == null) {
+			throw new IllegalArgumentException("服務類型不可為空");
+		}
 
-	    if (serviceName == null || serviceName.trim().isEmpty()) {
-	        throw new IllegalArgumentException("服務名稱不可為空");
-	    }
+		if (serviceName == null || serviceName.trim().isEmpty()) {
+			throw new IllegalArgumentException("服務名稱不可為空");
+		}
 
-	    if (hourlyRate == null || hourlyRate < 0) {
-	        throw new IllegalArgumentException("每小時費率不可小於 0");
-	    }
+		if (hourlyRate == null || hourlyRate < 0) {
+			throw new IllegalArgumentException("每小時費率不可小於 0");
+		}
 
-	    if (status == null || (status != 0 && status != 1)) {
-	        throw new IllegalArgumentException("服務狀態不合法");
-	    }
+		if (status == null || (status != 0 && status != 1)) {
+			throw new IllegalArgumentException("服務狀態不合法");
+		}
 
-	    ServiceVO svc = new ServiceVO();
+		ServiceVO svc = new ServiceVO();
 
-	    svc.setServiceTypeId(serviceTypeId);
-	    svc.setMemberId(memberId);
-	    svc.setServiceName(serviceName);
-	    svc.setDescription(description);
-	    svc.setHourlyRate(hourlyRate);
-	    svc.setStatus(status);
-	    svc.setCreatedAt(createdAt);
+		svc.setServiceTypeId(serviceTypeId);
+		svc.setMemberId(memberId);
+		svc.setServiceName(serviceName);
+		svc.setDescription(description);
+		svc.setHourlyRate(hourlyRate);
+		svc.setStatus(status);
+		svc.setCreatedAt(createdAt);
 
-	    dao.insert(svc);
+		dao.insert(svc);
 
-	    return svc;
+		return svc;
 	}
 
 	public ServiceVO update(Integer serviceId, Integer serviceTypeId, Integer memberId, String serviceName,
@@ -81,10 +86,10 @@ public class ServiceService {
 	public List<ServiceVO> getAll() {
 		return dao.getAll();
 	}
-	
-	//關聯查詢
-	
+
+	// 關聯查詢
+
 	public List<ServiceVO> getServicesByServiceTypeId(Integer serviceTypeId) {
-	    return dao.getByServiceTypeId(serviceTypeId);
+		return dao.getByServiceTypeId(serviceTypeId);
 	}
 }

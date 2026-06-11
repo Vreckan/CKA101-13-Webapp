@@ -10,5 +10,4 @@ public interface ServiceTypeDAO_interface {
 	
 	public ServiceTypeVO findByPK (Integer PK);
 	public List<ServiceTypeVO> getAll();
-	public List<ServiceTypeVO> getSameType(Integer PK);
 }

@@ -6,6 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.servicetype.model.ServiceTypeService;
 import com.servicetype.model.ServiceTypeVO;
 
@@ -18,6 +21,16 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/servicetype/servicetype.do")
 public class ServiceTypeServlet extends HttpServlet{
+	private ServiceTypeService serviceTypeSvc;
+	
+	@Override
+    public void init() throws ServletException {
+        WebApplicationContext ctx =
+                WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+
+        serviceTypeSvc = ctx.getBean(ServiceTypeService.class);
+    }
+	
 	protected void doGet(HttpServletRequest req,HttpServletResponse res) throws ServletException, IOException {
 		doPost(req,res);
 	}
@@ -29,7 +42,7 @@ public class ServiceTypeServlet extends HttpServlet{
         String action = req.getParameter("action");
 
         if ("getAll".equals(action)) {
-            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+//            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
             List<ServiceTypeVO> list = serviceTypeSvc.getAll();
 
             req.setAttribute("serviceTypeList", list);
@@ -70,7 +83,7 @@ public class ServiceTypeServlet extends HttpServlet{
         	
             serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
 
-            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+//            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
             ServiceTypeVO serviceTypeVO = serviceTypeSvc.findByPK(serviceTypeId);
 
             req.setAttribute("serviceTypeVO", serviceTypeVO);
@@ -80,54 +93,85 @@ public class ServiceTypeServlet extends HttpServlet{
             successView.forward(req, res);
         }
         
-        if("insert".equals(action)) {
-        	Map<String,String>errorMsgs = new LinkedHashMap<>();
-        	req.setAttribute("errorMsgs", errorMsgs);
+        if ("insert".equals(action)) {
+
+            Map<String, String> errorMsgs = new LinkedHashMap<>();
+            req.setAttribute("errorMsgs", errorMsgs);
+
             String typeName = req.getParameter("typeName");
-            
+            String description = req.getParameter("description");
+            String typeModeStr = req.getParameter("typeMode");
+            String imgURL = req.getParameter("imgURL");
+
+            // 類型名稱驗證
             if (typeName == null || typeName.trim().length() == 0) {
                 errorMsgs.put("typeName", "服務類型名稱請勿空白");
+            } else if (typeName.trim().length() > 50) {
+                errorMsgs.put("typeName", "服務類型名稱不可超過 50 字");
             }
 
-            String description = req.getParameter("description");
+            // 類型描述驗證
             if (description == null || description.trim().length() == 0) {
                 errorMsgs.put("description", "服務類型描述請勿空白");
+            } else if (description.trim().length() > 255) {
+                errorMsgs.put("description", "服務類型描述不可超過 255 字");
             }
 
+            // 類型狀態驗證
             Integer typeMode = null;
-            try {
-                typeMode = Integer.valueOf(req.getParameter("typeMode"));
-            } catch (Exception e) {
+            if (typeModeStr == null || typeModeStr.trim().length() == 0) {
                 errorMsgs.put("typeMode", "請選擇服務類型狀態");
+            } else {
+                try {
+                    typeMode = Integer.valueOf(typeModeStr.trim());
+
+                    if (typeMode != 0 && typeMode != 1) {
+                        errorMsgs.put("typeMode", "類型狀態只能是 0 或 1");
+                    }
+
+                } catch (NumberFormatException e) {
+                    errorMsgs.put("typeMode", "類型狀態格式錯誤");
+                }
             }
 
-            String imgURL = req.getParameter("imgURL");
+            // 預設圖片路徑驗證
             if (imgURL == null || imgURL.trim().length() == 0) {
                 errorMsgs.put("imgURL", "圖片路徑請勿空白");
+            } else if (imgURL.trim().length() > 255) {
+                errorMsgs.put("imgURL", "圖片路徑不可超過 255 字");
+            } else if (!imgURL.trim().matches("^/images/service/.+\\.(jpg|jpeg|png|gif|webp)$")) {
+                errorMsgs.put("imgURL", "圖片路徑格式錯誤，例如：/images/service/walk.jpg");
             }
-            
+
+            // 保留使用者輸入的資料
             ServiceTypeVO serviceTypeVO = new ServiceTypeVO();
             serviceTypeVO.setTypeName(typeName);
             serviceTypeVO.setDescrip(description);
             serviceTypeVO.setTypeMode(typeMode);
             serviceTypeVO.setImgURL(imgURL);
-            
+
+            // 有錯誤就回到新增頁
             if (!errorMsgs.isEmpty()) {
                 req.setAttribute("serviceTypeVO", serviceTypeVO);
+
                 RequestDispatcher failureView =
                         req.getRequestDispatcher("/frontend/servicetype/addServiceType.jsp");
                 failureView.forward(req, res);
                 return;
             }
-        	ServiceTypeService serTypeSvc = new ServiceTypeService();
-            serviceTypeVO = serTypeSvc.add(
-                    typeName,
-                    description,
+
+            // 沒錯誤才新增
+//            ServiceTypeService serTypeSvc = new ServiceTypeService();
+
+            serviceTypeVO = serviceTypeSvc.add(
+                    typeName.trim(),
+                    description.trim(),
                     typeMode,
-                    imgURL
+                    imgURL.trim()
             );
-            //測試用
+
             System.out.println("新增後的 serviceTypeId = " + serviceTypeVO.getSvcTypeID());
+
             req.setAttribute("serviceTypeVO", serviceTypeVO);
 
             RequestDispatcher successView =
@@ -139,7 +183,7 @@ public class ServiceTypeServlet extends HttpServlet{
         if ("getOne_For_Update".equals(action)) {
             Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
             
-            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+//            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
             ServiceTypeVO serviceTypeVO = serviceTypeSvc.findByPK(serviceTypeId);
 
             req.setAttribute("serviceTypeVO", serviceTypeVO);
@@ -152,7 +196,7 @@ public class ServiceTypeServlet extends HttpServlet{
         if ("delete".equals(action)) {
             Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
 
-            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+//            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
             serviceTypeSvc.delete(serviceTypeId);
 
             List<ServiceTypeVO> list = serviceTypeSvc.getAll();
@@ -165,21 +209,96 @@ public class ServiceTypeServlet extends HttpServlet{
         }
         
         if ("update".equals(action)) {
-        	
-        	Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
+
+            Map<String, String> errorMsgs = new LinkedHashMap<>();
+            req.setAttribute("errorMsgs", errorMsgs);
+
+            String serviceTypeIdStr = req.getParameter("serviceTypeId");
             String typeName = req.getParameter("typeName");
             String description = req.getParameter("description");
-            Integer typeMode = Integer.valueOf(req.getParameter("typeMode"));
+            String typeModeStr = req.getParameter("typeMode");
             String imgURL = req.getParameter("imgURL");
 
-            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+            Integer serviceTypeId = null;
+            Integer typeMode = null;
 
-            ServiceTypeVO serviceTypeVO = serviceTypeSvc.update(
+            // 1. 服務類型編號驗證
+            if (serviceTypeIdStr == null || serviceTypeIdStr.trim().length() == 0) {
+                errorMsgs.put("serviceTypeId", "服務類型編號遺失");
+            } else {
+                try {
+                    serviceTypeId = Integer.valueOf(serviceTypeIdStr.trim());
+                } catch (NumberFormatException e) {
+                    errorMsgs.put("serviceTypeId", "服務類型編號格式錯誤");
+                }
+            }
+
+            // 2. 類型名稱驗證
+            if (typeName == null || typeName.trim().length() == 0) {
+                errorMsgs.put("typeName", "服務類型名稱請勿空白");
+            } else if (typeName.trim().length() > 50) {
+                errorMsgs.put("typeName", "服務類型名稱不可超過 50 字");
+            }
+
+            // 3. 類型描述驗證
+            if (description == null || description.trim().length() == 0) {
+                errorMsgs.put("description", "服務類型描述請勿空白");
+            } else if (description.trim().length() > 255) {
+                errorMsgs.put("description", "服務類型描述不可超過 255 字");
+            }
+
+            // 4. 類型狀態驗證
+            if (typeModeStr == null || typeModeStr.trim().length() == 0) {
+                errorMsgs.put("typeMode", "請選擇服務類型狀態");
+            } else {
+                try {
+                    typeMode = Integer.valueOf(typeModeStr.trim());
+
+                    if (typeMode != 0 && typeMode != 1) {
+                        errorMsgs.put("typeMode", "類型狀態只能是 0 或 1");
+                    }
+
+                } catch (NumberFormatException e) {
+                    errorMsgs.put("typeMode", "類型狀態格式錯誤");
+                }
+            }
+
+            // 5. 圖片路徑驗證
+            if (imgURL == null || imgURL.trim().length() == 0) {
+                errorMsgs.put("imgURL", "圖片路徑請勿空白");
+            } else if (imgURL.trim().length() > 255) {
+                errorMsgs.put("imgURL", "圖片路徑不可超過 255 字");
+            } else if (!imgURL.trim().matches("^/images/service/.+\\.(jpg|jpeg|png|gif|webp)$")) {
+                errorMsgs.put("imgURL", "圖片路徑格式錯誤，例如：/images/service/walk.jpg");
+            }
+
+            // 6. 保留使用者輸入的資料
+            ServiceTypeVO serviceTypeVO = new ServiceTypeVO();
+            serviceTypeVO.setSvcTypeID(serviceTypeId);
+            serviceTypeVO.setTypeName(typeName);
+            serviceTypeVO.setDescrip(description);
+            serviceTypeVO.setTypeMode(typeMode);
+            serviceTypeVO.setImgURL(imgURL);
+
+            // 7. 有錯誤就回修改頁
+            if (!errorMsgs.isEmpty()) {
+                req.setAttribute("serviceTypeVO", serviceTypeVO);
+
+                RequestDispatcher failureView =
+                        req.getRequestDispatcher("/frontend/servicetype/update_service_type_input.jsp");
+                failureView.forward(req, res);
+                return;
+            }
+
+            // 8. 沒錯誤才更新
+//            ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+
+            serviceTypeVO = serviceTypeSvc.update(
                     serviceTypeId,
-                    typeName,
-                    description,
+                    typeName.trim(),
+                    description.trim(),
                     typeMode,
-                    imgURL
+                    imgURL.trim()
             );
 
             req.setAttribute("serviceTypeVO", serviceTypeVO);

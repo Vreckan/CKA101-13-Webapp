@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.webond.util.HibernateUtil;
-
+//最舊的hibernate寫法
 public class ServiceTypeDAOHibernate implements ServiceTypeDAO_interface {
 	
     @Override
@@ -83,9 +83,4 @@ public class ServiceTypeDAOHibernate implements ServiceTypeDAO_interface {
         }
     }
 
-	@Override
-	public List<ServiceTypeVO> getSameType(Integer PK) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

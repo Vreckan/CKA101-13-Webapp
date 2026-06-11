@@ -24,7 +24,6 @@ public class ServiceTypeDAO implements ServiceTypeDAO_interface {
 	private static final String INSERT_STMT = "INSERT INTO service_type (TYPE_NAME,`DESCRIPTION`,TYPE_MODE,DEFAULT_IMAGE_URL)VALUES (?,?,?,?);";
 	private static final String GET_ALL_STMT = "SELECT * FROM service_type";
 	private static final String GET_ONE_STMT = "SELECT * FROM service_type WHERE SERVICE_TYPE_ID = ?";
-	private static final String GET_SAME_TYPE_STMT = "SELECT * FROM service where SERVICE_TYPE_ID = ? order by MEMBER_ID";
 	private static final String DELETE_STMT = "DELETE FROM service_type where SERVICE_TYPE_ID = ?";
 	private static final String UPDATE_STMT = "UPDATE service_type SET TYPE_NAME=?, `DESCRIPTION`=?, TYPE_MODE=?, DEFAULT_IMAGE_URL=? WHERE SERVICE_TYPE_ID=?";
 	@Override
@@ -254,60 +253,5 @@ public class ServiceTypeDAO implements ServiceTypeDAO_interface {
 		}
 
 		return list;
-	}
-
-	@Override
-	public List<ServiceTypeVO> getSameType(Integer PK) {
-		List <ServiceTypeVO> list = new ArrayList<>();
-		ServiceTypeVO serviceTypeVO = null;
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-
-			con = ds.getConnection();
-			pstmt = con.prepareStatement(GET_SAME_TYPE_STMT);
-			pstmt.setInt(1, PK);
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				// empVo 也稱為 Domain objects
-				serviceTypeVO = new ServiceTypeVO();
-				serviceTypeVO.setSvcTypeID(rs.getInt("SERVICE_TYPE_ID"));
-				serviceTypeVO.setTypeName(rs.getString("TYPE_NAME"));
-				serviceTypeVO.setDescrip(rs.getString("DESCRIPTION"));
-				serviceTypeVO.setTypeMode(rs.getInt("TYPE_MODE"));
-				serviceTypeVO.setImgURL(rs.getString("DEFAULT_IMAGE_URL"));
-				list.add(serviceTypeVO);
-			}
-			return list;
-
-			// Handle any driver errors
-		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. " + se.getMessage());
-			// Clean up JDBC resources
-		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException se) {
-					se.printStackTrace(System.err);
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException se) {
-					se.printStackTrace(System.err);
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (Exception e) {
-					e.printStackTrace(System.err);
-				}
-			}
-		}
 	}
 }

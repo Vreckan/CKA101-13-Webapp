@@ -5,6 +5,7 @@ import org.hibernate.cfg.Configuration;
 
 //import com.servicetype.model.ServiceTypeVO;
 
+//給DAOHibernate版本使用
 public class HibernateUtil {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();

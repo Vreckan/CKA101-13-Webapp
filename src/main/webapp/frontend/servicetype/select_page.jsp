@@ -38,7 +38,6 @@
 
 	<br>
 
-	<h3>錯誤訊息</h3>
 
 	<c:if test="${not empty errorMsgs}">
 		<ul style="color: red;">

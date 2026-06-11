@@ -1,0 +1,128 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>全部服務時段</title>
+<style>
+body {
+    font-family: "Microsoft JhengHei", Arial, sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 40px;
+}
+.container {
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border: 1px solid #ddd;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background: #f9fafb;
+}
+button, a.btn {
+    display: inline-block;
+    background: #111827;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+.btn-red {
+    background: #dc2626;
+}
+.btn-gray {
+    background: #6b7280;
+}
+.empty {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+}
+form {
+    display: inline;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>全部服務時段</h1>
+
+    <a class="btn btn-gray" href="${pageContext.request.contextPath}/frontend/serviceslot/select_page.jsp">返回查詢頁</a>
+    <a class="btn" href="${pageContext.request.contextPath}/frontend/serviceslot/addServiceSlot.jsp">新增服務時段</a>
+
+    <c:if test="${empty serviceSlotList}">
+        <div class="empty">目前沒有任何服務時段資料。</div>
+    </c:if>
+
+    <c:if test="${not empty serviceSlotList}">
+        <table>
+            <tr>
+                <th>時段編號</th>
+                <th>服務編號</th>
+                <th>開始時間</th>
+                <th>結束時間</th>
+                <th>狀態</th>
+                <th>鎖定到期時間</th>
+                <th>操作</th>
+            </tr>
+
+            <c:forEach var="slot" items="${serviceSlotList}">
+                <tr>
+                    <td>${slot.serviceSlotId}</td>
+                    <td>${slot.serviceId}</td>
+                    <td>${slot.startTime}</td>
+                    <td>${slot.endTime}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${slot.slotStatus == 0}">可預約</c:when>
+                            <c:when test="${slot.slotStatus == 1}">已預約</c:when>
+                            <c:otherwise>鎖定 / 暫停</c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty slot.lockExpiresAt}">
+                                ${slot.lockExpiresAt}
+                            </c:when>
+                            <c:otherwise>無</c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do">
+                            <input type="hidden" name="action" value="getOne_For_Update">
+                            <input type="hidden" name="serviceSlotId" value="${slot.serviceSlotId}">
+                            <button type="submit">修改</button>
+                        </form>
+
+                        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do"
+                              onsubmit="return confirm('確定刪除這筆服務時段嗎？');">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="serviceSlotId" value="${slot.serviceSlotId}">
+                            <button type="submit" class="btn-red">刪除</button>
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
+
+</div>
+</body>
+</html>

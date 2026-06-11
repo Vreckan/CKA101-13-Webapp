@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 
 import com.webond.util.HibernateUtil;
 
+//透過濾器開啟/關閉交易
 public class ServiceDAOHibernate implements ServiceDAO_interface {
 
 	private SessionFactory factory;

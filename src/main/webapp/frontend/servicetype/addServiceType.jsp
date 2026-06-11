@@ -3,9 +3,9 @@
 <%@ page import="com.servicetype.model.*"%>
 
 <%
-//新增失敗放回物件
 ServiceTypeVO serviceTypeVO = (ServiceTypeVO) request.getAttribute("serviceTypeVO");
 %>
+
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -30,7 +30,7 @@ h4 {
 }
 
 table {
-	width: 520px;
+	width: 900px;
 	background-color: white;
 	margin-top: 1px;
 	margin-bottom: 1px;
@@ -42,10 +42,23 @@ table, th, td {
 
 th, td {
 	padding: 6px;
+	font-size: 18px;
 }
 
 input[type="text"] {
-	width: 320px;
+	width: 520px;
+	font-size: 18px;
+}
+
+select {
+	font-size: 18px;
+}
+
+.error {
+	color: red;
+	font-size: 15px;
+	margin-left: 10px;
+	white-space: nowrap;
 }
 </style>
 
@@ -60,23 +73,13 @@ input[type="text"] {
 			</td>
 			<td>
 				<h4>
-					<a href="select_page.jsp">回首頁</a>
+					<a href="${pageContext.request.contextPath}/frontend/servicetype/select_page.jsp">回首頁</a>
 				</h4>
 			</td>
 		</tr>
 	</table>
 
 	<h3>資料新增：</h3>
-
-<%-- 	<%-- 錯誤表列：如果 Servlet 有放 errorMsgs，這裡會顯示 --%> --%>
-<%-- 	<c:if test="${not empty errorMsgs}"> --%>
-<!-- 		<font style="color: red">請修正以下錯誤：</font> -->
-<!-- 		<ul> -->
-<%-- 			<c:forEach var="message" items="${errorMsgs}"> --%>
-<%-- 				<li style="color: red">${message}</li> --%>
-<%-- 			</c:forEach> --%>
-<!-- 		</ul> -->
-<%-- 	</c:if> --%>
 
 	<form method="post"
 		action="${pageContext.request.contextPath}/servicetype/servicetype.do"
@@ -86,44 +89,58 @@ input[type="text"] {
 
 			<tr>
 				<td>類型名稱：</td>
-				<td><input type="text" name="typeName"
-					value="<%=(serviceTypeVO == null) ? "陪同散步" : serviceTypeVO.getTypeName()%>"
-					size="45" /></td>
+				<td>
+					<input type="text" name="typeName"
+						value="<%=(serviceTypeVO == null || serviceTypeVO.getTypeName() == null) ? "陪同散步" : serviceTypeVO.getTypeName()%>"
+						size="45" />
+					<span class="error">${errorMsgs.typeName}</span>
+				</td>
 			</tr>
 
 			<tr>
 				<td>類型描述：</td>
-				<td><input type="text" name="description"
-					value="<%=(serviceTypeVO == null) ? "陪同使用者在公園、河堤或市區散步聊天" : serviceTypeVO.getDescrip()%>"
-					size="45" /></td>
+				<td>
+					<input type="text" name="description"
+						value="<%=(serviceTypeVO == null || serviceTypeVO.getDescrip() == null) ? "陪同使用者在公園、河堤或市區散步聊天" : serviceTypeVO.getDescrip()%>"
+						size="45" />
+					<span class="error">${errorMsgs.description}</span>
+				</td>
 			</tr>
 
 			<tr>
 				<td>類型狀態：</td>
-				<td><select name="typeMode">
+				<td>
+					<select name="typeMode">
 						<option value="0"
-							<%=(serviceTypeVO != null && serviceTypeVO.getTypeMode() != null && serviceTypeVO.getTypeMode() == 0) ? "selected"
-				: ""%>>
-							0：動態</option>
+							<%=(serviceTypeVO == null || serviceTypeVO.getTypeMode() == null || serviceTypeVO.getTypeMode() == 0) ? "selected" : ""%>>
+							0：動態
+						</option>
 
 						<option value="1"
-							<%=(serviceTypeVO != null && serviceTypeVO.getTypeMode() != null && serviceTypeVO.getTypeMode() == 1) ? "selected"
-				: ""%>>
-							1：靜態</option>
-				</select></td>
+							<%=(serviceTypeVO != null && serviceTypeVO.getTypeMode() != null && serviceTypeVO.getTypeMode() == 1) ? "selected" : ""%>>
+							1：靜態
+						</option>
+					</select>
+					<span class="error">${errorMsgs.typeMode}</span>
+				</td>
 			</tr>
 
 			<tr>
 				<td>預設圖片路徑：</td>
-				<td><input type="text" name="imgURL"
-					value="<%=(serviceTypeVO == null) ? "/images/service/walk.jpg" : serviceTypeVO.getImgURL()%>"
-					size="45" /></td>
+				<td>
+					<input type="text" name="imgURL"
+						value="<%=(serviceTypeVO == null || serviceTypeVO.getImgURL() == null) ? "/images/service/walk.jpg" : serviceTypeVO.getImgURL()%>"
+						size="45" />
+					<span class="error">${errorMsgs.imgURL}</span>
+				</td>
 			</tr>
 
 		</table>
 
-		<br> <input type="hidden" name="action" value="insert"> <input
-			type="submit" value="送出新增">
+		<br>
+
+		<input type="hidden" name="action" value="insert">
+		<input type="submit" value="送出新增">
 
 	</form>
 

@@ -20,12 +20,27 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/service/service.do")
 public class ServiceServlet extends HttpServlet {
+	
+	private ServiceService serviceSvc;
+	private ServiceTypeService serviceTypeSvc;
+	
+	@Override
+	public void init() throws ServletException {
+	    var ctx = org.springframework.web.context.support.WebApplicationContextUtils
+	            .getRequiredWebApplicationContext(getServletContext());
+
+	    serviceSvc = ctx.getBean(ServiceService.class);
+	    serviceTypeSvc = ctx.getBean(ServiceTypeService.class);
+	}
+	
+	
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		doPost(req, res);
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		
 
 		req.setCharacterEncoding("UTF-8");
 
@@ -38,7 +53,7 @@ public class ServiceServlet extends HttpServlet {
 		}
 
 		if ("getAll".equals(action)) {
-			ServiceService serviceSvc = new ServiceService();
+//			ServiceService serviceSvc = new ServiceService();
 
 			List<ServiceVO> list = serviceSvc.getAll();
 
@@ -86,7 +101,7 @@ public class ServiceServlet extends HttpServlet {
 		        return;
 		    }
 
-		    ServiceService serviceSvc = new ServiceService();
+//		    ServiceService serviceSvc = new ServiceService();
 		    ServiceVO serviceVO = serviceSvc.getOneService(serviceId);
 
 		    // 4. 檢查資料是否存在
@@ -193,7 +208,7 @@ public class ServiceServlet extends HttpServlet {
 		        return;
 		    }
 
-		    ServiceService serviceSvc = new ServiceService();
+//		    ServiceService serviceSvc = new ServiceService();
 
 		    serviceVO = serviceSvc.add(
 		            serviceTypeId,
@@ -217,7 +232,7 @@ public class ServiceServlet extends HttpServlet {
 		if ("getOne_For_Update".equals(action)) {
 			Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
 
-			ServiceService serviceSvc = new ServiceService();
+//			ServiceService serviceSvc = new ServiceService();
 
 			ServiceVO serviceVO = serviceSvc.getOneService(serviceId);
 
@@ -238,7 +253,7 @@ public class ServiceServlet extends HttpServlet {
 			Integer hourlyRate = Integer.valueOf(req.getParameter("hourlyRate"));
 			Byte status = Byte.valueOf(req.getParameter("status"));
 
-			ServiceService serviceSvc = new ServiceService();
+//			ServiceService serviceSvc = new ServiceService();
 
 			ServiceVO serviceVO = serviceSvc.update(serviceId, serviceTypeId, memberId, serviceName, description,
 					hourlyRate, status);
@@ -254,7 +269,7 @@ public class ServiceServlet extends HttpServlet {
 		if ("delete".equals(action)) {
 			Integer serviceId = Integer.valueOf(req.getParameter("serviceId"));
 
-			ServiceService serviceSvc = new ServiceService();
+//			ServiceService serviceSvc = new ServiceService();
 
 			serviceSvc.delete(serviceId);
 
@@ -272,7 +287,7 @@ public class ServiceServlet extends HttpServlet {
 
 			Integer serviceTypeId = Integer.valueOf(req.getParameter("serviceTypeId"));
 
-			ServiceService serviceSvc = new ServiceService();
+//			ServiceService serviceSvc = new ServiceService();
 			List<ServiceVO> serviceList = serviceSvc.getServicesByServiceTypeId(serviceTypeId);
 
 			req.setAttribute("serviceList", serviceList);
@@ -285,7 +300,7 @@ public class ServiceServlet extends HttpServlet {
 
 			System.out.println("進入 toServiceSelectPage");
 
-			ServiceTypeService serviceTypeSvc = new ServiceTypeService();
+//			ServiceTypeService serviceTypeSvc = new ServiceTypeService();
 			List<ServiceTypeVO> list = serviceTypeSvc.getAll();
 
 			System.out.println("服務類型數量 = " + list.size());

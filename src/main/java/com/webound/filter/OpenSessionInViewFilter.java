@@ -1,4 +1,4 @@
-package com.webond.listener;
+package com.webound.filter;
 
 import java.io.IOException;
 
@@ -15,7 +15,8 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 
-@WebFilter(urlPatterns = { "/service/*" })
+//@WebFilter(urlPatterns = { "/service/*" })
+//給沒spring且優化的Hibernate使用
 public class OpenSessionInViewFilter implements Filter {
 
     @Override
