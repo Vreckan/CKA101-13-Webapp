@@ -1,11 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:if test="${serviceTypeList == null}">
-	<jsp:forward page="/service/service.do">
-		<jsp:param name="action" value="toServiceSelectPage" />
-	</jsp:forward>
-</c:if>
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -248,10 +242,11 @@ input[type="text"]:focus, input[type="number"]:focus {
 	background: #e5e7eb;
 	margin: 22px 0;
 }
+
 .field-error {
-    color: red;
-    font-size: 14px;
-    font-weight: bold;
+	color: red;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 @media ( max-width : 900px) {
@@ -329,19 +324,20 @@ input[type="text"]:focus, input[type="number"]:focus {
 
 					<div class="panel-body">
 
-						<form method="post"
-							action="${pageContext.request.contextPath}/service/service.do">
-							<input type="hidden" name="action" value="getAll"> <input
-								type="submit" class="btn btn-blue" value="查看服務列表">
+						<form method="get"
+							<%--action="${pageContext.request.contextPath}/service/service.do"> --%>
+							action="${pageContext.request.contextPath}/service/list">
+							<!-- 							<input type="hidden" name="action" value="getAll">  -->
+							<input type="submit" class="btn btn-blue" value="查看服務列表">
 						</form>
 
 						<div class="hint">目前尚未串接登入，因此此功能暫時會依你的 Servlet/DAO 設定顯示資料。
 							之後正式版應改為「只查詢目前登入會員的服務」。</div>
 
 						<div class="divider"></div>
+						<form method="get"
+							action="${pageContext.request.contextPath}/service/one">
 
-						<form method="post"
-							action="${pageContext.request.contextPath}/service/service.do">
 							<div class="input-with-error">
 								<input type="text" name="serviceId"
 									value="<c:out value='${param.serviceId}' />"
@@ -355,14 +351,13 @@ input[type="text"]:focus, input[type="number"]:focus {
 								</c:if>
 							</div>
 
-							<input type="hidden" name="action" value="getOne_For_Display">
 							<input type="submit" class="btn btn-dark" value="查詢指定服務">
 						</form>
 
 						<div class="divider"></div>
 
-						<form method="post"
-							action="${pageContext.request.contextPath}/service/service.do">
+						<form method="get"
+							action="${pageContext.request.contextPath}/service/type">
 							<div class="form-group">
 								<label for="serviceTypeId">依服務類型查詢服務</label> <select
 									id="serviceTypeId" name="serviceTypeId">
@@ -374,10 +369,7 @@ input[type="text"]:focus, input[type="number"]:focus {
 									</c:forEach>
 								</select>
 							</div>
-
-							<input type="hidden" name="action"
-								value="getServices_By_ServiceType"> <input type="submit"
-								class="btn btn-blue" value="查詢此類型底下服務">
+							<input type="submit" class="btn btn-blue" value="查詢此類型底下服務">
 						</form>
 
 					</div>
@@ -397,7 +389,7 @@ input[type="text"]:focus, input[type="number"]:focus {
 						</div>
 
 						<a class="btn btn-green"
-							href="${pageContext.request.contextPath}/frontend/service/addService.jsp">
+							href="${pageContext.request.contextPath}/service/add">
 							新增一筆服務 </a>
 					</div>
 				</section>

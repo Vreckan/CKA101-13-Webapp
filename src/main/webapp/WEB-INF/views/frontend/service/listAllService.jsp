@@ -350,11 +350,11 @@
             </div>
 
             <div class="toolbar-actions">
-                <a class="btn btn-light" href="${pageContext.request.contextPath}/frontend/service/select_page.jsp">
+                <a class="btn btn-light" href="${pageContext.request.contextPath}/service/select">
                     返回管理首頁
                 </a>
 
-                <a class="btn btn-dark" href="${pageContext.request.contextPath}/frontend/service/addService.jsp">
+                <a class="btn btn-dark" href="${pageContext.request.contextPath}/service/add">
                     新增服務
                 </a>
             </div>
@@ -365,7 +365,7 @@
                 <h2>目前沒有任何服務資料</h2>
                 <p>你尚未建立服務資料。可以先新增一筆服務，測試上架流程是否正常。</p>
 
-                <a class="btn btn-dark" href="${pageContext.request.contextPath}/frontend/service/addService.jsp">
+                <a class="btn btn-dark" href="${pageContext.request.contextPath}/service/add">
                     新增第一筆服務
                 </a>
             </div>
@@ -438,18 +438,18 @@
                                     </td>
 
                                     <td>
-                                        <form class="action-form" method="post" action="${pageContext.request.contextPath}/service/service.do">
+                                        <form class="action-form" method="get" action="${pageContext.request.contextPath}/service/edit">
                                             <input type="hidden" name="serviceId" value="${serviceVO.serviceId}">
-                                            <input type="hidden" name="action" value="getOne_For_Update">
+<!--                                             <input type="hidden" name="action" value="getOne_For_Update"> -->
                                             <input type="submit" class="btn btn-edit" value="修改">
                                         </form>
                                     </td>
 
                                     <td>
-                                        <form class="action-form" method="post" action="${pageContext.request.contextPath}/service/service.do"
+                                        <form class="action-form" method="post" action="${pageContext.request.contextPath}/service/delete"
                                               onsubmit="return confirm('確定要刪除這筆服務嗎？');">
                                             <input type="hidden" name="serviceId" value="${serviceVO.serviceId}">
-                                            <input type="hidden" name="action" value="delete">
+<!--                                             <input type="hidden" name="action" value="delete"> -->
                                             <input type="submit" class="btn btn-delete" value="刪除">
                                         </form>
                                     </td>

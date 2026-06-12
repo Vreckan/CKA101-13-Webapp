@@ -328,8 +328,8 @@ input:focus, textarea:focus, select:focus {
 					<div class="panel-body">
 
 						<form method="post"
-							action="${pageContext.request.contextPath}/service/service.do">
-
+							<%--action="${pageContext.request.contextPath}/service/service.do"> --%>
+							action="${pageContext.request.contextPath}/service/insert">
 							<div class="form-row">
 								<div class="form-group">
 									<div class="input-with-error">
@@ -430,17 +430,17 @@ input:focus, textarea:focus, select:focus {
 													value="${errorMsgs.status}" />
 											</span>
 										</c:if>
-									</div>
+									</div>	
 								</div>
 							</div>
 
-							<input type="hidden" name="action" value="insert">
+<!-- 							<input type="hidden" name="action" value="insert"> -->
 
 							<div class="btn-row">
 								<input type="submit" class="btn btn-primary" value="送出新增">
 
 								<a class="btn btn-secondary"
-									href="${pageContext.request.contextPath}/frontend/service/select_page.jsp">
+									href="${pageContext.request.contextPath}/service/select">
 									返回服務管理 </a>
 							</div>
 

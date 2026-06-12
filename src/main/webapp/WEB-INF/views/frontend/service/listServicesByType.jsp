@@ -41,7 +41,7 @@
 
 <br>
 
-<a href="${pageContext.request.contextPath}/servicetype/servicetype.do?action=toServiceSelectPage">
+<a href="${pageContext.request.contextPath}/servicetype/select">
     回服務查詢頁
 </a>
 

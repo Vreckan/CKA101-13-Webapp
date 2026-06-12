@@ -356,7 +356,7 @@
                 <h2>查無此服務資料</h2>
                 <p>系統沒有找到對應的服務資料，請確認服務編號是否正確。</p>
 
-                <a class="btn btn-dark" href="${pageContext.request.contextPath}/frontend/service/select_page.jsp">
+                <a class="btn btn-dark" href="${pageContext.request.contextPath}/service/select">
                     返回服務管理
                 </a>
             </div>
@@ -426,13 +426,13 @@
                         </div>
 
                         <div class="btn-row">
-                            <form class="action-form" method="post" action="${pageContext.request.contextPath}/service/service.do">
+                            <form class="action-form" method="get" action="${pageContext.request.contextPath}/service/edit">
                                 <input type="hidden" name="serviceId" value="${serviceVO.serviceId}">
-                                <input type="hidden" name="action" value="getOne_For_Update">
+<!--                                 <input type="hidden" name="action" value="getOne_For_Update"> -->
                                 <input type="submit" class="btn btn-blue" value="修改此服務">
                             </form>
 
-                            <a class="btn btn-light" href="${pageContext.request.contextPath}/frontend/service/select_page.jsp">
+                            <a class="btn btn-light" href="${pageContext.request.contextPath}/service/select">
                                 返回管理首頁
                             </a>
                         </div>
