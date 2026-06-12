@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +32,15 @@
             </td>
         </tr>
     </table>
+
+    <br>
+
+    <form method="get"
+          action="${pageContext.request.contextPath}/servicetype/edit">
+        <input type="hidden" name="serviceTypeId" value="${serviceTypeVO.svcTypeID}">
+        <input type="submit" value="修改此服務類型">
+    </form>
+
 </c:if>
 
 <c:if test="${empty serviceTypeVO}">
@@ -39,7 +49,9 @@
 
 <br>
 
-<a href="${pageContext.request.contextPath}/frontend/servicetype/select_page.jsp">回服務類型查詢首頁</a>
+<a href="${pageContext.request.contextPath}/servicetype/select">
+    回服務類型查詢首頁
+</a>
 
 </body>
 </html>

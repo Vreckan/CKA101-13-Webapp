@@ -1,14 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="com.servicetype.model.*"%>
 
-<%
-ServiceTypeVO serviceTypeVO = (ServiceTypeVO) request.getAttribute("serviceTypeVO");
-%>
-
-<html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="UTF-8">
 <title>服務類型新增 - addServiceType.jsp</title>
 
 <style>
@@ -73,7 +70,7 @@ select {
 			</td>
 			<td>
 				<h4>
-					<a href="${pageContext.request.contextPath}/frontend/servicetype/select_page.jsp">回首頁</a>
+					<a href="${pageContext.request.contextPath}/servicetype/select">回首頁</a>
 				</h4>
 			</td>
 		</tr>
@@ -82,7 +79,7 @@ select {
 	<h3>資料新增：</h3>
 
 	<form method="post"
-		action="${pageContext.request.contextPath}/servicetype/servicetype.do"
+		action="${pageContext.request.contextPath}/servicetype/insert"
 		name="form1">
 
 		<table>
@@ -91,7 +88,7 @@ select {
 				<td>類型名稱：</td>
 				<td>
 					<input type="text" name="typeName"
-						value="<%=(serviceTypeVO == null || serviceTypeVO.getTypeName() == null) ? "陪同散步" : serviceTypeVO.getTypeName()%>"
+						value="${empty serviceTypeVO.typeName ? '陪同散步' : serviceTypeVO.typeName}"
 						size="45" />
 					<span class="error">${errorMsgs.typeName}</span>
 				</td>
@@ -101,7 +98,7 @@ select {
 				<td>類型描述：</td>
 				<td>
 					<input type="text" name="description"
-						value="<%=(serviceTypeVO == null || serviceTypeVO.getDescrip() == null) ? "陪同使用者在公園、河堤或市區散步聊天" : serviceTypeVO.getDescrip()%>"
+						value="${empty serviceTypeVO.descrip ? '陪同使用者在公園、河堤或市區散步聊天' : serviceTypeVO.descrip}"
 						size="45" />
 					<span class="error">${errorMsgs.description}</span>
 				</td>
@@ -112,12 +109,12 @@ select {
 				<td>
 					<select name="typeMode">
 						<option value="0"
-							<%=(serviceTypeVO == null || serviceTypeVO.getTypeMode() == null || serviceTypeVO.getTypeMode() == 0) ? "selected" : ""%>>
+							${empty serviceTypeVO.typeMode || serviceTypeVO.typeMode == 0 ? 'selected' : ''}>
 							0：動態
 						</option>
 
 						<option value="1"
-							<%=(serviceTypeVO != null && serviceTypeVO.getTypeMode() != null && serviceTypeVO.getTypeMode() == 1) ? "selected" : ""%>>
+							${serviceTypeVO.typeMode == 1 ? 'selected' : ''}>
 							1：靜態
 						</option>
 					</select>
@@ -129,7 +126,7 @@ select {
 				<td>預設圖片路徑：</td>
 				<td>
 					<input type="text" name="imgURL"
-						value="<%=(serviceTypeVO == null || serviceTypeVO.getImgURL() == null) ? "/images/service/walk.jpg" : serviceTypeVO.getImgURL()%>"
+						value="${empty serviceTypeVO.imgURL ? '/images/service/walk.jpg' : serviceTypeVO.imgURL}"
 						size="45" />
 					<span class="error">${errorMsgs.imgURL}</span>
 				</td>
@@ -139,7 +136,6 @@ select {
 
 		<br>
 
-		<input type="hidden" name="action" value="insert">
 		<input type="submit" value="送出新增">
 
 	</form>

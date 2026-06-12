@@ -37,29 +37,31 @@
 					<td>${serviceTypeVO.descrip}</td>
 					<td>${serviceTypeVO.typeMode == 0 ? '動態' : '靜態'}</td>
 					<td>${serviceTypeVO.imgURL}</td>
-					<td><img
-						src="${pageContext.request.contextPath}${serviceTypeVO.imgURL}"
-						width="120"></td>
 
 					<td>
-						<form method="post"
-							action="${pageContext.request.contextPath}/servicetype/servicetype.do">
-							<input type="hidden" name="serviceTypeId"
-								value="${serviceTypeVO.svcTypeID}"> <input
-								type="hidden" name="action" value="getOne_For_Update"> <input
-								type="submit" value="修改">
+						<img src="${pageContext.request.contextPath}${serviceTypeVO.imgURL}"
+							 width="120">
+					</td>
+
+					<td>
+						<form method="get"
+							  action="${pageContext.request.contextPath}/servicetype/edit">
+							<input type="hidden"
+								   name="serviceTypeId"
+								   value="${serviceTypeVO.svcTypeID}">
+							<input type="submit" value="修改">
 						</form>
 					</td>
 
 					<td>
 						<form method="post"
-							action="${pageContext.request.contextPath}/servicetype/servicetype.do">
-							<input type="hidden" name="serviceTypeId"
-								value="${serviceTypeVO.svcTypeID}"> <input
-								type="hidden" name="action" value="delete"> <input
-								type="submit" value="刪除">
+							  action="${pageContext.request.contextPath}/servicetype/delete"
+							  onsubmit="return confirm('確定要刪除這筆服務類型嗎？');">
+							<input type="hidden"
+								   name="serviceTypeId"
+								   value="${serviceTypeVO.svcTypeID}">
+							<input type="submit" value="刪除">
 						</form>
-						
 					</td>
 				</tr>
 			</c:forEach>
@@ -68,8 +70,9 @@
 
 	<br>
 
-	<a
-		href="${pageContext.request.contextPath}/frontend/servicetype/select_page.jsp">回服務類型查詢首頁</a>
+	<a href="${pageContext.request.contextPath}/servicetype/select">
+		回服務類型查詢首頁
+	</a>
 
 </body>
 </html>

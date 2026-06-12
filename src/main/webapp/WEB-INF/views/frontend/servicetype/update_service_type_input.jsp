@@ -1,14 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="com.servicetype.model.*"%>
 
-<%
-ServiceTypeVO serviceTypeVO = (ServiceTypeVO) request.getAttribute("serviceTypeVO");
-%>
-
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="UTF-8">
 <title>服務類型修改 - update_service_type_input.jsp</title>
 
 <style>
@@ -73,7 +70,7 @@ select {
 			</td>
 			<td>
 				<h4>
-					<a href="${pageContext.request.contextPath}/frontend/servicetype/select_page.jsp">回首頁</a>
+					<a href="${pageContext.request.contextPath}/servicetype/select">回首頁</a>
 				</h4>
 			</td>
 		</tr>
@@ -81,80 +78,90 @@ select {
 
 	<h3>資料修改：</h3>
 
-	<form method="post"
-		action="${pageContext.request.contextPath}/servicetype/servicetype.do"
-		name="form1">
+	<c:if test="${empty serviceTypeVO}">
+		<p style="color:red;">查無此服務類型資料，無法修改。</p>
 
-		<table>
+		<a href="${pageContext.request.contextPath}/servicetype/select">
+			返回服務類型查詢首頁
+		</a>
+	</c:if>
 
-			<tr>
-				<td>服務類型編號：</td>
-				<td>
-					<%=serviceTypeVO == null ? "" : serviceTypeVO.getSvcTypeID()%>
-					<span class="error">${errorMsgs.serviceTypeId}</span>
-				</td>
-			</tr>
+	<c:if test="${not empty serviceTypeVO}">
 
-			<tr>
-				<td>類型名稱：</td>
-				<td>
-					<input type="text" name="typeName"
-						value="<%=(serviceTypeVO == null || serviceTypeVO.getTypeName() == null) ? "" : serviceTypeVO.getTypeName()%>"
-						size="45" />
-					<span class="error">${errorMsgs.typeName}</span>
-				</td>
-			</tr>
+		<form method="post"
+			action="${pageContext.request.contextPath}/servicetype/update"
+			name="form1">
 
-			<tr>
-				<td>類型描述：</td>
-				<td>
-					<input type="text" name="description"
-						value="<%=(serviceTypeVO == null || serviceTypeVO.getDescrip() == null) ? "" : serviceTypeVO.getDescrip()%>"
-						size="45" />
-					<span class="error">${errorMsgs.description}</span>
-				</td>
-			</tr>
+			<table>
 
-			<tr>
-				<td>類型狀態：</td>
-				<td>
-					<select name="typeMode">
-						<option value="0"
-							<%=(serviceTypeVO != null && serviceTypeVO.getTypeMode() != null && serviceTypeVO.getTypeMode() == 0) ? "selected" : ""%>>
-							0：動態
-						</option>
+				<tr>
+					<td>服務類型編號：</td>
+					<td>
+						${serviceTypeVO.svcTypeID}
+						<span class="error">${errorMsgs.serviceTypeId}</span>
+					</td>
+				</tr>
 
-						<option value="1"
-							<%=(serviceTypeVO != null && serviceTypeVO.getTypeMode() != null && serviceTypeVO.getTypeMode() == 1) ? "selected" : ""%>>
-							1：靜態
-						</option>
-					</select>
-					<span class="error">${errorMsgs.typeMode}</span>
-				</td>
-			</tr>
+				<tr>
+					<td>類型名稱：</td>
+					<td>
+						<input type="text" name="typeName"
+							value="<c:out value='${serviceTypeVO.typeName}' />"
+							size="45" />
+						<span class="error">${errorMsgs.typeName}</span>
+					</td>
+				</tr>
 
-			<tr>
-				<td>預設圖片路徑：</td>
-				<td>
-					<input type="text" name="imgURL"
-						value="<%=(serviceTypeVO == null || serviceTypeVO.getImgURL() == null) ? "" : serviceTypeVO.getImgURL()%>"
-						size="45" />
-					<span class="error">${errorMsgs.imgURL}</span>
-				</td>
-			</tr>
+				<tr>
+					<td>類型描述：</td>
+					<td>
+						<input type="text" name="description"
+							value="<c:out value='${serviceTypeVO.descrip}' />"
+							size="45" />
+						<span class="error">${errorMsgs.description}</span>
+					</td>
+				</tr>
 
-		</table>
+				<tr>
+					<td>類型狀態：</td>
+					<td>
+						<select name="typeMode">
+							<option value="0"
+								${serviceTypeVO.typeMode == 0 ? 'selected' : ''}>
+								0：動態
+							</option>
 
-		<br>
+							<option value="1"
+								${serviceTypeVO.typeMode == 1 ? 'selected' : ''}>
+								1：靜態
+							</option>
+						</select>
+						<span class="error">${errorMsgs.typeMode}</span>
+					</td>
+				</tr>
 
-		<input type="hidden" name="serviceTypeId"
-			value="<%=serviceTypeVO == null ? "" : serviceTypeVO.getSvcTypeID()%>">
+				<tr>
+					<td>預設圖片路徑：</td>
+					<td>
+						<input type="text" name="imgURL"
+							value="<c:out value='${serviceTypeVO.imgURL}' />"
+							size="45" />
+						<span class="error">${errorMsgs.imgURL}</span>
+					</td>
+				</tr>
 
-		<input type="hidden" name="action" value="update">
+			</table>
 
-		<input type="submit" value="送出修改">
+			<br>
 
-	</form>
+			<input type="hidden" name="serviceTypeId"
+				value="${serviceTypeVO.svcTypeID}">
+
+			<input type="submit" value="送出修改">
+
+		</form>
+
+	</c:if>
 
 </body>
 </html>
