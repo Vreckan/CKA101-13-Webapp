@@ -60,7 +60,7 @@ form {
 
     <c:if test="${empty serviceSlotVO}">
         <div class="empty">查無服務時段資料。</div>
-        <a class="btn btn-gray" href="${pageContext.request.contextPath}/frontend/serviceslot/select_page.jsp">返回查詢頁</a>
+        <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/select">返回查詢頁</a>
     </c:if>
 
     <c:if test="${not empty serviceSlotVO}">
@@ -108,17 +108,16 @@ form {
             </div>
         </div>
 
-        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do">
-            <input type="hidden" name="action" value="getOne_For_Update">
+        <form method="get" action="${pageContext.request.contextPath}/serviceslot/edit">
             <input type="hidden" name="serviceSlotId" value="${serviceSlotVO.serviceSlotId}">
             <button type="submit">修改</button>
         </form>
 
-        <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/serviceslot.do?action=getAll">
+        <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/list">
             回全部列表
         </a>
 
-        <a class="btn btn-gray" href="${pageContext.request.contextPath}/frontend/serviceslot/select_page.jsp">
+        <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/select">
             回查詢頁
         </a>
 

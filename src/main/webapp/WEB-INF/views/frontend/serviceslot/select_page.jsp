@@ -67,8 +67,7 @@ button, a.btn {
     <div class="card">
         <h2>查詢單一服務時段</h2>
 
-        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do">
-            <input type="hidden" name="action" value="getOne_For_Display">
+        <form method="get" action="${pageContext.request.contextPath}/serviceslot/one">
 
             <label>服務時段編號</label>
             <input type="number" name="serviceSlotId" value="${param.serviceSlotId}">
@@ -84,8 +83,7 @@ button, a.btn {
     <div class="card">
         <h2>依服務編號查詢時段</h2>
 
-        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do">
-            <input type="hidden" name="action" value="getByServiceId">
+        <form method="get" action="${pageContext.request.contextPath}/serviceslot/service">
 
             <label>服務編號</label>
             <input type="number" name="serviceId" value="${param.serviceId}">
@@ -102,13 +100,13 @@ button, a.btn {
         <h2>其他操作</h2>
 
         <p>
-            <a class="btn" href="${pageContext.request.contextPath}/frontend/serviceslot/addServiceSlot.jsp">
+            <a class="btn" href="${pageContext.request.contextPath}/serviceslot/add">
                 新增服務時段
             </a>
         </p>
 
         <p>
-            <a class="btn" href="${pageContext.request.contextPath}/serviceslot/serviceslot.do?action=getAll">
+            <a class="btn" href="${pageContext.request.contextPath}/serviceslot/list">
                 查看全部服務時段
             </a>
         </p>

@@ -62,12 +62,12 @@ button, a.btn {
 
     <c:if test="${empty serviceSlotVO}">
         <div class="empty">查無服務時段資料，無法修改。</div>
-        <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/serviceslot.do?action=getAll">返回列表</a>
+        <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/list">返回列表</a>
     </c:if>
 
     <c:if test="${not empty serviceSlotVO}">
-        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do">
-            <input type="hidden" name="action" value="update">
+        <form method="post" action="${pageContext.request.contextPath}/serviceslot/update">
+
             <input type="hidden" name="serviceSlotId" value="${serviceSlotVO.serviceSlotId}">
 
             <label>服務時段編號</label>
@@ -109,7 +109,7 @@ button, a.btn {
             </c:if>
 
             <button type="submit">儲存修改</button>
-            <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/serviceslot.do?action=getAll">取消返回</a>
+            <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/list">取消返回</a>
         </form>
     </c:if>
 

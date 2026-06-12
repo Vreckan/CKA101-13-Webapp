@@ -52,7 +52,7 @@ a.btn {
 
     <h1>指定服務的時段列表</h1>
 
-    <a class="btn" href="${pageContext.request.contextPath}/frontend/serviceslot/select_page.jsp">返回查詢頁</a>
+    <a class="btn" href="${pageContext.request.contextPath}/serviceslot/select">返回查詢頁</a>
 
     <c:if test="${empty serviceSlotList}">
         <div class="empty">此服務目前沒有任何時段。</div>

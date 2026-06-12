@@ -56,8 +56,7 @@ a.btn-light {
 
     <h1>新增服務時段</h1>
 
-    <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do">
-        <input type="hidden" name="action" value="insert">
+    <form method="post" action="${pageContext.request.contextPath}/serviceslot/insert">
 
         <label>服務編號</label>
         <input type="number" name="serviceId" value="${serviceSlotVO.serviceId}">
@@ -95,7 +94,7 @@ a.btn-light {
         </c:if>
 
         <button type="submit">新增</button>
-        <a class="btn btn-light" href="${pageContext.request.contextPath}/frontend/serviceslot/select_page.jsp">返回</a>
+        <a class="btn btn-light" href="${pageContext.request.contextPath}/serviceslot/select">返回</a>
     </form>
 
 </div>

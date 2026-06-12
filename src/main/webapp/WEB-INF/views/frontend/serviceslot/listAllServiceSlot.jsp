@@ -64,8 +64,8 @@ form {
 
     <h1>全部服務時段</h1>
 
-    <a class="btn btn-gray" href="${pageContext.request.contextPath}/frontend/serviceslot/select_page.jsp">返回查詢頁</a>
-    <a class="btn" href="${pageContext.request.contextPath}/frontend/serviceslot/addServiceSlot.jsp">新增服務時段</a>
+    <a class="btn btn-gray" href="${pageContext.request.contextPath}/serviceslot/select">返回查詢頁</a>
+    <a class="btn" href="${pageContext.request.contextPath}/serviceslot/add">新增服務時段</a>
 
     <c:if test="${empty serviceSlotList}">
         <div class="empty">目前沒有任何服務時段資料。</div>
@@ -105,15 +105,13 @@ form {
                         </c:choose>
                     </td>
                     <td>
-                        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do">
-                            <input type="hidden" name="action" value="getOne_For_Update">
+                        <form method="get" action="${pageContext.request.contextPath}/serviceslot/edit">
                             <input type="hidden" name="serviceSlotId" value="${slot.serviceSlotId}">
                             <button type="submit">修改</button>
                         </form>
 
-                        <form method="post" action="${pageContext.request.contextPath}/serviceslot/serviceslot.do"
+                        <form method="post" action="${pageContext.request.contextPath}/serviceslot/delete"
                               onsubmit="return confirm('確定刪除這筆服務時段嗎？');">
-                            <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="serviceSlotId" value="${slot.serviceSlotId}">
                             <button type="submit" class="btn-red">刪除</button>
                         </form>

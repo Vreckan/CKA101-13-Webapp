@@ -86,9 +86,9 @@ body {
 }
 
 .mode-badge {
-    background: #fff7ed;
-    color: #c2410c;
-    border: 1px solid #fed7aa;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
     padding: 8px 12px;
     font-size: 13px;
     font-weight: 800;
@@ -139,7 +139,7 @@ body {
     padding: 24px;
     display: flex;
     flex-direction: column;
-    min-height: 260px;
+    min-height: 280px;
 }
 
 .card-tag {
@@ -152,12 +152,6 @@ body {
     font-size: 12px;
     font-weight: 800;
     margin-bottom: 16px;
-}
-
-.card-tag.pending {
-    background: #f9fafb;
-    color: #6b7280;
-    border: 1px solid #d1d5db;
 }
 
 .card h2 {
@@ -222,12 +216,6 @@ body {
     transform: translateY(-1px);
 }
 
-.btn-disabled {
-    background: #e5e7eb;
-    color: #6b7280;
-    cursor: not-allowed;
-}
-
 .footer-note {
     margin-top: 32px;
     color: #9ca3af;
@@ -278,7 +266,9 @@ body {
 
         <div class="nav-title">MAIN</div>
         <div class="nav-item">首頁總覽</div>
-        <div class="nav-item">Spring MVC 版本</div>
+        <div class="nav-item">Service 管理</div>
+        <div class="nav-item">ServiceType 管理</div>
+        <div class="nav-item">ServiceSlot 管理</div>
     </aside>
 
     <main class="main">
@@ -292,7 +282,7 @@ body {
                 </p>
             </div>
 
-            <div class="mode-badge">開發測試模式</div>
+            <div class="mode-badge">Spring MVC 三個模組已開放</div>
         </div>
 
         <div class="summary-row">
@@ -332,28 +322,32 @@ body {
             </section>
 
             <section class="card">
-                <div class="card-tag pending">待轉換</div>
+                <div class="card-tag">已轉 Spring MVC</div>
                 <h2>服務類型管理</h2>
                 <p>
                     管理服務分類資料，例如服務類型名稱、描述、狀態與預設圖片。
-                    建議後續也改成 /servicetype/select 這類 Controller URL。
+                    可新增、查詢、修改與刪除服務類型。
                 </p>
 
                 <div class="action-row">
-                    <a class="btn btn-disabled" href="javascript:void(0)">尚未開放 Spring MVC 入口</a>
+                    <a class="btn btn-dark" href="servicetype/select">進入服務類型管理</a>
+                    <a class="btn btn-blue" href="servicetype/list">查看服務類型列表</a>
+                    <a class="btn btn-green" href="servicetype/add">新增服務類型</a>
                 </div>
             </section>
 
             <section class="card">
-                <div class="card-tag pending">待轉換</div>
+                <div class="card-tag">已轉 Spring MVC</div>
                 <h2>服務時段管理</h2>
                 <p>
-                    管理服務可預約時段。後續可改成 /serviceslot/select、
-                    /serviceslot/list、/serviceslot/add 等 Spring MVC 路由。
+                    管理服務可預約時段。可查詢全部時段、依服務編號查詢時段、
+                    新增時段、修改時段與刪除時段。
                 </p>
 
                 <div class="action-row">
-                    <a class="btn btn-disabled" href="javascript:void(0)">尚未開放 Spring MVC 入口</a>
+                    <a class="btn btn-dark" href="serviceslot/select">進入服務時段管理</a>
+                    <a class="btn btn-blue" href="serviceslot/list">查看服務時段列表</a>
+                    <a class="btn btn-green" href="serviceslot/add">新增服務時段</a>
                 </div>
             </section>
 
@@ -361,7 +355,7 @@ body {
 
         <div class="footer-note">
             提醒：這個檔案是靜態 index.html，所以不要使用 JSP 語法。
-            連結請使用相對路徑，例如 service/select，而不是 ${pageContext.request.contextPath}。
+            連結使用相對路徑，例如 service/select、servicetype/select、serviceslot/select。
         </div>
 
     </main>
