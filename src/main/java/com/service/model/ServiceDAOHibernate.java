@@ -51,7 +51,9 @@ public class ServiceDAOHibernate implements ServiceDAO_interface {
 	public List<ServiceVO> getByServiceTypeId(Integer serviceTypeId) {
 	    return getSession()
 	            .createQuery(
-	            	"from ServiceVO s where s.serviceType.svcTypeID = :serviceTypeId",
+	                "select s from ServiceVO s " +
+	                "join fetch s.serviceType st " +
+	                "where st.svcTypeID = :serviceTypeId",
 	                ServiceVO.class
 	            )
 	            .setParameter("serviceTypeId", serviceTypeId)
