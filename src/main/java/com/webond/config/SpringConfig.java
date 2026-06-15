@@ -24,14 +24,22 @@ public class SpringConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource ds = new DriverManagerDataSource();
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/webond_db?serverTimezone=Asia/Taipei&characterEncoding=UTF-8");
-        ds.setUsername("root");
-        ds.setPassword("123456");
+        String jdbcUrl = System.getenv().getOrDefault(
+                "JDBC_URL",
+                "jdbc:mysql://localhost:3306/webond_project?serverTimezone=Asia/Taipei&characterEncoding=UTF-8"
+        );
 
-        return ds;
+        String jdbcUsername = System.getenv().getOrDefault("JDBC_USERNAME", "root");
+        String jdbcPassword = System.getenv().getOrDefault("JDBC_PASSWORD", "123456");
+
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl(jdbcUrl);
+        dataSource.setUsername(jdbcUsername);
+        dataSource.setPassword(jdbcPassword);
+
+        return dataSource;
     }
 
     @Bean

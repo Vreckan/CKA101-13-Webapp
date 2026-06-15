@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "service_slot")
+@Table(name = "SERVICE_SLOT")
 public class ServiceSlotVO {
 
     @Id
