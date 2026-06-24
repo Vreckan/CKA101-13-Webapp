@@ -21,7 +21,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 })
 @EnableTransactionManagement
 public class SpringConfig {
-
+//DriverManagerDataSource 沒有預設幾條 connection，因為它沒有連線池；HikariCP 才有 maximumPoolSize、minimumIdle 這種 pool 設定。
+	
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.service.dto.ServiceDTO;
+import com.service.dto.ServiceRequest;
 import com.service.model.ServiceService;
 import com.service.model.ServiceVO;
 import com.servicetype.model.ServiceTypeService;
@@ -36,7 +38,7 @@ public class ServiceApiController {
         this.serviceTypeSvc = serviceTypeSvc;
     }
 
-    // 查全部服務
+    // 查全部服務	
     @GetMapping("/services")
     public ResponseEntity<List<ServiceDTO>> getAllServices() {
         List<ServiceDTO> list = serviceSvc.getAll()
@@ -81,12 +83,12 @@ public class ServiceApiController {
         }
 
         ServiceVO serviceVO = serviceSvc.add(
-                request.serviceTypeId,
-                request.memberId,
-                request.serviceName.trim(),
-                request.description.trim(),
-                request.hourlyRate,
-                request.status.byteValue(),
+                request.getServiceTypeId(),
+                request.getMemberId(),
+                request.getServiceName().trim(),
+                request.getDescription().trim(),
+                request.getHourlyRate(),
+                request.getStatus().byteValue(),
                 LocalDateTime.now()
         );
 
@@ -115,12 +117,12 @@ public class ServiceApiController {
 
         ServiceVO serviceVO = serviceSvc.update(
                 serviceId,
-                request.serviceTypeId,
-                request.memberId,
-                request.serviceName.trim(),
-                request.description.trim(),
-                request.hourlyRate,
-                request.status.byteValue()
+                request.getServiceTypeId(),
+                request.getMemberId(),
+                request.getServiceName().trim(),
+                request.getDescription().trim(),
+                request.getHourlyRate(),
+                request.getStatus().byteValue()
         );
 
         return ResponseEntity.ok(toServiceDTO(serviceVO));
@@ -141,16 +143,16 @@ public class ServiceApiController {
         return ResponseEntity.noContent().build();
     }
 
-	//    // 查全部服務類型，給 Vue 下拉選單用
-	//    @GetMapping("/service-types")
-	//    public ResponseEntity<List<ServiceTypeDTO>> getAllServiceTypes() {
-	//        List<ServiceTypeDTO> list = serviceTypeSvc.getAll()
-	//                .stream()
-	//                .map(this::toServiceTypeDTO)
-	//                .collect(Collectors.toList());
-	//
-	//        return ResponseEntity.ok(list);
-	//    }
+//	    // 查全部服務類型，給 Vue 下拉選單用
+//	    @GetMapping("/service-types")
+//	    public ResponseEntity<List<ServiceTypeDTO>> getAllServiceTypes() {
+//	        List<ServiceTypeDTO> list = serviceTypeSvc.getAll()
+//	                .stream()
+//	                .map(this::toServiceTypeDTO)
+//	                .collect(Collectors.toList());
+//	
+//	        return ResponseEntity.ok(list);
+//	    }
 
     private Map<String, String> validateServiceRequest(ServiceRequest request) {
         Map<String, String> errors = new LinkedHashMap<>();
@@ -160,33 +162,33 @@ public class ServiceApiController {
             return errors;
         }
 
-        if (request.serviceTypeId == null || request.serviceTypeId <= 0) {
+        if (request.getServiceTypeId() == null || request.getServiceTypeId() <= 0) {
             errors.put("serviceTypeId", "請選擇服務類型");
         }
 
-        if (request.memberId == null || request.memberId <= 0) {
+        if (request.getMemberId() == null || request.getMemberId() <= 0) {
             errors.put("memberId", "會員編號必須大於 0");
         }
 
-        if (request.serviceName == null || request.serviceName.trim().isEmpty()) {
+        if (request.getServiceName() == null || request.getServiceName().trim().isEmpty()) {
             errors.put("serviceName", "服務名稱請勿空白");
-        } else if (request.serviceName.trim().length() > 50) {
+        } else if (request.getServiceName().trim().length() > 50) {
             errors.put("serviceName", "服務名稱不可超過 50 個字");
         }
 
-        if (request.description == null || request.description.trim().isEmpty()) {
+        if (request.getDescription() == null || request.getDescription().trim().isEmpty()) {
             errors.put("description", "服務描述請勿空白");
         }
 
-        if (request.hourlyRate == null) {
+        if (request.getHourlyRate() == null) {
             errors.put("hourlyRate", "每小時費率必須是整數");
-        } else if (request.hourlyRate < 0) {
+        } else if (request.getHourlyRate() < 0) {
             errors.put("hourlyRate", "每小時費率不可小於 0");
         }
 
-        if (request.status == null) {
+        if (request.getStatus() == null) {
             errors.put("status", "請選擇服務狀態");
-        } else if (request.status != 0 && request.status != 1) {
+        } else if (request.getStatus() != 0 && request.getStatus() != 1) {
             errors.put("status", "服務狀態只能是 0 或 1");
         }
 
@@ -196,16 +198,16 @@ public class ServiceApiController {
     private ServiceDTO toServiceDTO(ServiceVO serviceVO) {
         ServiceDTO dto = new ServiceDTO();
 
-        dto.serviceId = serviceVO.getServiceId();
-        dto.serviceTypeId = serviceVO.getServiceTypeId();
-        dto.memberId = serviceVO.getMemberId();
-        dto.serviceName = serviceVO.getServiceName();
-        dto.description = serviceVO.getDescription();
-        dto.hourlyRate = serviceVO.getHourlyRate();
-        dto.status = serviceVO.getStatus();
+        dto.setServiceId(serviceVO.getServiceId());
+        dto.setServiceTypeId(serviceVO.getServiceTypeId());
+        dto.setMemberId(serviceVO.getMemberId());
+        dto.setServiceName(serviceVO.getServiceName());
+        dto.setDescription(serviceVO.getDescription());
+        dto.setHourlyRate(serviceVO.getHourlyRate());
+        dto.setStatus(serviceVO.getStatus());
 
         if (serviceVO.getCreatedAt() != null) {
-            dto.createdAt = serviceVO.getCreatedAt().toString();
+            dto.setCreatedAt(serviceVO.getCreatedAt().toString());
         }
 
         return dto;
@@ -221,26 +223,6 @@ public class ServiceApiController {
         dto.imgURL = serviceTypeVO.getImgURL();
 
         return dto;
-    }
-
-    public static class ServiceRequest {
-        public Integer serviceTypeId;
-        public Integer memberId;
-        public String serviceName;
-        public String description;
-        public Integer hourlyRate;
-        public Integer status;
-    }
-
-    public static class ServiceDTO {
-        public Integer serviceId;
-        public Integer serviceTypeId;
-        public Integer memberId;
-        public String serviceName;
-        public String description;
-        public Integer hourlyRate;
-        public Byte status;
-        public String createdAt;
     }
 
     public static class ServiceTypeDTO {
