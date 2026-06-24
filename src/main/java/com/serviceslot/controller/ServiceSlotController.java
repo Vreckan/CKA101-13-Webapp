@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +20,9 @@ import com.serviceslot.model.ServiceSlotVO;
 @Controller
 @RequestMapping("/serviceslot")
 public class ServiceSlotController {
-
+	@Autowired
     private final ServiceSlotService serviceSlotSvc;
-
+	@Autowired
     public ServiceSlotController(ServiceSlotService serviceSlotSvc) {
         this.serviceSlotSvc = serviceSlotSvc;
     }
