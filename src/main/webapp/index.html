@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>WeBond｜首頁</title>
+<title>WeBond｜REST API 測試首頁</title>
 
 <style>
 * {
@@ -24,14 +25,14 @@ body {
 }
 
 .sidebar {
-    width: 260px;
+    width: 280px;
     background: #111827;
     color: white;
     padding: 32px 24px;
 }
 
 .brand {
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 900;
     letter-spacing: 1px;
     margin-bottom: 8px;
@@ -40,8 +41,8 @@ body {
 .brand-subtitle {
     font-size: 14px;
     color: #9ca3af;
-    line-height: 1.6;
-    margin-bottom: 38px;
+    line-height: 1.7;
+    margin-bottom: 36px;
 }
 
 .nav-title {
@@ -61,14 +62,15 @@ body {
 
 .main {
     flex: 1;
-    padding: 42px 52px;
+    padding: 40px 48px;
 }
 
 .topbar {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 34px;
+    gap: 24px;
+    margin-bottom: 28px;
 }
 
 .page-title h1 {
@@ -82,30 +84,30 @@ body {
     color: #6b7280;
     font-size: 15px;
     line-height: 1.8;
-    max-width: 760px;
+    max-width: 860px;
 }
 
 .mode-badge {
-    background: #ecfdf5;
-    color: #047857;
-    border: 1px solid #a7f3d0;
-    padding: 8px 12px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    padding: 9px 13px;
     font-size: 13px;
-    font-weight: 800;
+    font-weight: 900;
     white-space: nowrap;
 }
 
 .summary-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
     margin-bottom: 28px;
 }
 
 .summary-card {
     background: white;
     border: 1px solid #e5e7eb;
-    padding: 22px;
+    padding: 20px;
     box-shadow: 0 8px 20px rgba(17, 24, 39, 0.04);
 }
 
@@ -116,7 +118,7 @@ body {
 }
 
 .summary-value {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 900;
 }
 
@@ -130,6 +132,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 22px;
+    margin-bottom: 28px;
 }
 
 .card {
@@ -139,18 +142,18 @@ body {
     padding: 24px;
     display: flex;
     flex-direction: column;
-    min-height: 280px;
+    min-height: 330px;
 }
 
 .card-tag {
     display: inline-block;
     width: fit-content;
-    background: #eff6ff;
-    color: #1d4ed8;
-    border: 1px solid #bfdbfe;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
     padding: 5px 9px;
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 900;
     margin-bottom: 16px;
 }
 
@@ -164,13 +167,45 @@ body {
     color: #6b7280;
     line-height: 1.8;
     font-size: 14px;
-    margin: 12px 0 22px;
-    flex: 1;
+    margin: 12px 0 18px;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    padding: 11px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    background: white;
+}
+
+textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .action-row {
     display: grid;
     gap: 10px;
+    margin-top: auto;
 }
 
 .btn {
@@ -186,6 +221,10 @@ body {
     transition: 0.18s ease;
 }
 
+.btn:hover {
+    transform: translateY(-1px);
+}
+
 .btn-dark {
     background: #111827;
     color: white;
@@ -193,7 +232,6 @@ body {
 
 .btn-dark:hover {
     background: #000;
-    transform: translateY(-1px);
 }
 
 .btn-blue {
@@ -203,7 +241,6 @@ body {
 
 .btn-blue:hover {
     background: #1d4ed8;
-    transform: translateY(-1px);
 }
 
 .btn-green {
@@ -213,17 +250,107 @@ body {
 
 .btn-green:hover {
     background: #047857;
-    transform: translateY(-1px);
+}
+
+.btn-red {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-red:hover {
+    background: #b91c1c;
+}
+
+.btn-gray {
+    background: #4b5563;
+    color: white;
+}
+
+.btn-gray:hover {
+    background: #374151;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, 0.05);
+    padding: 24px;
+    margin-bottom: 28px;
+}
+
+.panel-title {
+    margin: 0 0 14px;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.custom-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr 160px;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.result-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.status-pill {
+    font-size: 13px;
+    font-weight: 900;
+    padding: 7px 10px;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+pre {
+    margin: 0;
+    background: #0f172a;
+    color: #d1fae5;
+    padding: 18px;
+    min-height: 260px;
+    overflow: auto;
+    line-height: 1.6;
+    font-size: 13px;
+    border-radius: 0;
 }
 
 .footer-note {
-    margin-top: 32px;
-    color: #9ca3af;
+    color: #6b7280;
     font-size: 13px;
-    line-height: 1.7;
+    line-height: 1.8;
 }
 
-@media (max-width: 1000px) {
+.code {
+    font-family: Consolas, Monaco, monospace;
+    background: #f3f4f6;
+    padding: 2px 5px;
+    border: 1px solid #e5e7eb;
+}
+
+@media (max-width: 1200px) {
+    .summary-row,
+    .card-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .custom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 820px) {
     .page {
         display: block;
     }
@@ -233,7 +360,7 @@ body {
     }
 
     .main {
-        padding: 30px 22px;
+        padding: 30px 20px;
     }
 
     .topbar {
@@ -251,116 +378,288 @@ body {
     }
 }
 </style>
+
 </head>
 
 <body>
 
 <div class="page">
 
-    <aside class="sidebar">
-        <div class="brand">WeBond</div>
-        <div class="brand-subtitle">
-            Spring MVC Practice<br>
-            Service Management System
+```
+<aside class="sidebar">
+    <div class="brand">WeBond</div>
+    <div class="brand-subtitle">
+        Spring MVC REST API<br>
+        Vue 前後端分離測試入口
+    </div>
+
+    <div class="nav-title">API MODULES</div>
+    <div class="nav-item">Service API</div>
+    <div class="nav-item">ServiceType API</div>
+    <div class="nav-item">ServiceSlot API</div>
+    <div class="nav-item">Custom Request</div>
+</aside>
+
+<main class="main">
+
+    <div class="topbar">
+        <div class="page-title">
+            <h1>WeBond REST API 測試首頁</h1>
+            <p>
+                這是 03 版本的 API 測試入口。此版本已拔除 JSP Controller 主線，
+                後端主要透過 <span class="code">@RestController</span> 回傳 JSON，
+                前端畫面預計交給 Vue 處理。
+            </p>
         </div>
 
-        <div class="nav-title">MAIN</div>
-        <div class="nav-item">首頁總覽</div>
-        <div class="nav-item">Service 管理</div>
-        <div class="nav-item">ServiceType 管理</div>
-        <div class="nav-item">ServiceSlot 管理</div>
-    </aside>
+        <div class="mode-badge">03｜Spring MVC REST API</div>
+    </div>
 
-    <main class="main">
+    <div class="summary-row">
+        <div class="summary-card">
+            <div class="summary-label">目前架構</div>
+            <div class="summary-value">Spring MVC REST</div>
+        </div>
 
-        <div class="topbar">
-            <div class="page-title">
-                <h1>WeBond 管理首頁</h1>
-                <p>
-                    此首頁作為目前 Java Web 專案的入口。JSP 頁面已移至 WEB-INF/views 底下，
-                    因此所有功能都應透過 Controller URL 進入，而不是直接連到 JSP 檔案。
-                </p>
+        <div class="summary-card">
+            <div class="summary-label">資料格式</div>
+            <div class="summary-value">JSON / DTO</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">資料層</div>
+            <div class="summary-value">Hibernate</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">連線池</div>
+            <div class="summary-value">HikariCP</div>
+        </div>
+    </div>
+
+    <h2 class="section-title">快速測試 GET API</h2>
+
+    <div class="card-grid">
+
+        <section class="card">
+            <div class="card-tag">Service</div>
+            <h2>服務 API</h2>
+            <p>
+                測試服務列表、單一服務查詢、依服務類型查詢。
+                這組 API 對應 Vue 首頁服務卡片與服務詳情頁。
+            </p>
+
+            <div class="input-row">
+                <input id="serviceId" type="number" value="1" min="1" placeholder="serviceId">
+                <button class="btn btn-blue" onclick="testApi('GET', 'api/services/' + getValue('serviceId'))">查單一</button>
             </div>
 
-            <div class="mode-badge">Spring MVC 三個模組已開放</div>
-        </div>
-
-        <div class="summary-row">
-            <div class="summary-card">
-                <div class="summary-label">目前架構</div>
-                <div class="summary-value">Spring MVC</div>
+            <div class="input-row">
+                <input id="serviceTypeId" type="number" value="1" min="1" placeholder="serviceTypeId">
+                <button class="btn btn-green" onclick="testApi('GET', 'api/services/type/' + getValue('serviceTypeId'))">依類型查</button>
             </div>
 
-            <div class="summary-card">
-                <div class="summary-label">View 位置</div>
-                <div class="summary-value">WEB-INF/views</div>
+            <div class="action-row">
+                <button class="btn btn-dark" onclick="testApi('GET', 'api/services')">查詢全部服務</button>
+                <a class="btn btn-gray" href="api/services" target="_blank">新分頁開啟 /api/services</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-tag">ServiceType</div>
+            <h2>服務類型 API</h2>
+            <p>
+                測試服務類型列表與單一服務類型查詢。
+                這組 API 可供 Vue 側邊分類選單使用。
+            </p>
+
+            <div class="input-row">
+                <input id="typeId" type="number" value="1" min="1" placeholder="serviceTypeId">
+                <button class="btn btn-blue" onclick="testApi('GET', 'api/service-types/' + getValue('typeId'))">查單一</button>
             </div>
 
-            <div class="summary-card">
-                <div class="summary-label">資料層</div>
-                <div class="summary-value">Hibernate</div>
+            <div class="action-row">
+                <button class="btn btn-dark" onclick="testApi('GET', 'api/service-types')">查詢全部服務類型</button>
+                <a class="btn btn-gray" href="api/service-types" target="_blank">新分頁開啟 /api/service-types</a>
             </div>
+        </section>
+
+        <section class="card">
+            <div class="card-tag">ServiceSlot</div>
+            <h2>服務時段 API</h2>
+            <p>
+                測試服務時段列表與依服務查詢時段。
+                這組 API 可供 Vue 下單頁選擇可預約時段使用。
+            </p>
+
+            <div class="input-row">
+                <input id="slotServiceId" type="number" value="1" min="1" placeholder="serviceId">
+                <button class="btn btn-green" onclick="testApi('GET', 'api/service-slots/service/' + getValue('slotServiceId'))">依服務查時段</button>
+            </div>
+
+            <div class="action-row">
+                <button class="btn btn-dark" onclick="testApi('GET', 'api/service-slots')">查詢全部服務時段</button>
+                <a class="btn btn-gray" href="api/service-slots" target="_blank">新分頁開啟 /api/service-slots</a>
+            </div>
+        </section>
+
+    </div>
+
+    <section class="panel">
+        <h2 class="panel-title">自訂 API 測試</h2>
+
+        <div class="custom-grid">
+            <select id="customMethod" onchange="toggleBodyArea()">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+
+            <input id="customPath" type="text" value="api/services" placeholder="例如：api/services">
+
+            <button class="btn btn-blue" onclick="sendCustomRequest()">送出測試</button>
         </div>
 
-        <h2 class="section-title">功能入口</h2>
+        <textarea id="customBody" style="display:none;">{
+```
 
-        <div class="card-grid">
+"serviceTypeId": 1,
+"memberId": 1,
+"serviceName": "英文家教",
+"description": "一對一英文口說練習",
+"hourlyRate": 600,
+"status": 1
+}</textarea>
 
-            <section class="card">
-                <div class="card-tag">已轉 Spring MVC</div>
-                <h2>服務管理</h2>
-                <p>
-                    管理會員上架服務。可查看服務列表、查詢指定服務、依服務類型查詢、
-                    新增服務、修改服務與刪除服務。
-                </p>
+```
+        <p class="footer-note">
+            GET 可直接用瀏覽器測試；POST / PUT / DELETE 建議用這裡或 Postman 測試。
+            路徑請使用相對路徑，例如 <span class="code">api/services</span>，
+            不需要手動輸入 <span class="code">/CKA101_C_myMaven1</span>。
+        </p>
+    </section>
 
-                <div class="action-row">
-                    <a class="btn btn-dark" href="service/select">進入服務管理</a>
-                    <a class="btn btn-blue" href="service/list">查看服務列表</a>
-                    <a class="btn btn-green" href="service/add">新增服務</a>
-                </div>
-            </section>
-
-            <section class="card">
-                <div class="card-tag">已轉 Spring MVC</div>
-                <h2>服務類型管理</h2>
-                <p>
-                    管理服務分類資料，例如服務類型名稱、描述、狀態與預設圖片。
-                    可新增、查詢、修改與刪除服務類型。
-                </p>
-
-                <div class="action-row">
-                    <a class="btn btn-dark" href="servicetype/select">進入服務類型管理</a>
-                    <a class="btn btn-blue" href="servicetype/list">查看服務類型列表</a>
-                    <a class="btn btn-green" href="servicetype/add">新增服務類型</a>
-                </div>
-            </section>
-
-            <section class="card">
-                <div class="card-tag">已轉 Spring MVC</div>
-                <h2>服務時段管理</h2>
-                <p>
-                    管理服務可預約時段。可查詢全部時段、依服務編號查詢時段、
-                    新增時段、修改時段與刪除時段。
-                </p>
-
-                <div class="action-row">
-                    <a class="btn btn-dark" href="serviceslot/select">進入服務時段管理</a>
-                    <a class="btn btn-blue" href="serviceslot/list">查看服務時段列表</a>
-                    <a class="btn btn-green" href="serviceslot/add">新增服務時段</a>
-                </div>
-            </section>
-
+    <section class="panel">
+        <div class="result-header">
+            <h2 class="result-title">API Response</h2>
+            <div id="status" class="status-pill">尚未測試</div>
         </div>
 
-        <div class="footer-note">
-            提醒：這個檔案是靜態 index.html，所以不要使用 JSP 語法。
-            連結使用相對路徑，例如 service/select、servicetype/select、serviceslot/select。
-        </div>
+        <pre id="result">點選上方 API 按鈕後，JSON 結果會顯示在這裡。</pre>
+    </section>
 
-    </main>
+    <div class="footer-note">
+        版本定位：01 是 Servlet + JSP + DAO，02 是 Spring MVC + JSP，
+        03 是 Spring MVC REST API + DTO + Vue 前後端分離。
+    </div>
+
+</main>
+```
 
 </div>
+
+<script>
+function getValue(id) {
+    return document.getElementById(id).value.trim();
+}
+
+function setStatus(text, ok) {
+    const status = document.getElementById("status");
+    status.textContent = text;
+
+    if (ok === true) {
+        status.style.background = "#ecfdf5";
+        status.style.color = "#047857";
+        status.style.borderColor = "#a7f3d0";
+    } else if (ok === false) {
+        status.style.background = "#fef2f2";
+        status.style.color = "#b91c1c";
+        status.style.borderColor = "#fecaca";
+    } else {
+        status.style.background = "#f3f4f6";
+        status.style.color = "#374151";
+        status.style.borderColor = "#e5e7eb";
+    }
+}
+
+function prettyPrint(data) {
+    if (typeof data === "string") {
+        try {
+            return JSON.stringify(JSON.parse(data), null, 2);
+        } catch (e) {
+            return data;
+        }
+    }
+
+    return JSON.stringify(data, null, 2);
+}
+
+async function testApi(method, path, body) {
+    const result = document.getElementById("result");
+
+    setStatus("Loading...", null);
+    result.textContent = "Requesting: " + method + " " + path;
+
+    const options = {
+        method: method,
+        headers: {}
+    };
+
+    if (body && method !== "GET") {
+        options.headers["Content-Type"] = "application/json";
+        options.body = body;
+    }
+
+    try {
+        const response = await fetch(path, options);
+        const contentType = response.headers.get("content-type") || "";
+
+        let data;
+        if (contentType.includes("application/json")) {
+            data = await response.json();
+        } else {
+            data = await response.text();
+        }
+
+        setStatus("HTTP " + response.status + " " + response.statusText, response.ok);
+        result.textContent = prettyPrint(data);
+
+    } catch (error) {
+        setStatus("Request Failed", false);
+        result.textContent = error.stack || error.message || String(error);
+    }
+}
+
+function toggleBodyArea() {
+    const method = document.getElementById("customMethod").value;
+    const body = document.getElementById("customBody");
+
+    if (method === "POST" || method === "PUT") {
+        body.style.display = "block";
+    } else {
+        body.style.display = "none";
+    }
+}
+
+function sendCustomRequest() {
+    const method = document.getElementById("customMethod").value;
+    const path = document.getElementById("customPath").value.trim();
+    const body = document.getElementById("customBody").value.trim();
+
+    if (!path) {
+        setStatus("Path is required", false);
+        document.getElementById("result").textContent = "請輸入 API 路徑，例如 api/services";
+        return;
+    }
+
+    if (method === "POST" || method === "PUT") {
+        testApi(method, path, body);
+    } else {
+        testApi(method, path);
+    }
+}
+</script>
 
 </body>
 </html>
