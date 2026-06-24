@@ -12,7 +12,7 @@
 	<groupId>CKA101_C_myMaven1</groupId>
 	<artifactId>CKA101_C_myMaven1</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging> <!-- spring boot-->
 	<name>CKA101_C_myMaven1</name>
 	<description>CKA101_C_myMaven1</description>
 	<properties>
